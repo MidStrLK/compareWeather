@@ -1,8 +1,17 @@
+// default to a 'localhost' configuration:
+var connection_string = '127.0.0.1:27017/compareweather';
+// if OPENSHIFT env variables are present, use the available connection info:
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+    process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+    process.env.OPENSHIFT_APP_NAME;
+}
 
-var mongo = require('mongodb'),											// include the mongodb module
+var mongo = require(mongodb_connection_string),											// include the mongodb module
 	//provide a sensible default for local development
 	db_name = 'weather',
-	mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name,
     requestdata = require('../node/requestdata'),
     Server = mongo.Server,
     Db = mongo.Db,
@@ -12,10 +21,7 @@ var mongo = require('mongodb'),											// include the mongodb module
     openconnection = [],
     name = 'weather';
 
-	//take advantage of openshift env vars when available:
-	if(process.env.OPENSHIFT_MONGODB_DB_URL){
-		mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
-	}
+
 	
 exports.requestMDB = requestMDB;
 
@@ -107,12 +113,18 @@ function removeDB(data, callback){
 
 /* Находим БД */
 function connectMongo(callback){
-    db.open(function(err, db) {												// connect to database server
+    db.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
         if(!err) {
             opendb = db;
             callback();
         }
     });
+    //db.open(function(err, db) {												// connect to database server
+    //    if(!err) {
+    //        opendb = db;
+    //        callback();
+    //    }
+    //});
 }
 
 /* Находим нужную коллекцию */
