@@ -1,7 +1,9 @@
 var http = require("http"),
     url = require("url"),
     weather = require("./weather"),
-    timer = require("./timer");
+    timer = require("./timer"),
+	server_port = process.env.OPENSHIFT_NODEJS_PORT || 8888,
+	server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 function start(route, handle) {
   function onRequest(request, response) {
@@ -22,9 +24,14 @@ function start(route, handle) {
     });
 
   }
-
-  http.createServer(onRequest).listen(8888);
-  console.log("Server has started.");
+ 
+	var server = http.createServer(onRequest);
+	server.listen(server_port, server_ip_address, function () {
+		console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
+	});
+  
+  //http.createServer(onRequest).listen(8888);
+  //console.log("Server has started.");
 
   timer.start();
 

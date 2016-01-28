@@ -1,4 +1,8 @@
+
 var mongo = require('mongodb'),											// include the mongodb module
+	//provide a sensible default for local development
+	db_name = 'weather',
+	mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name,
     requestdata = require('../node/requestdata'),
     Server = mongo.Server,
     Db = mongo.Db,
@@ -8,6 +12,11 @@ var mongo = require('mongodb'),											// include the mongodb module
     openconnection = [],
     name = 'weather';
 
+	//take advantage of openshift env vars when available:
+	if(process.env.OPENSHIFT_MONGODB_DB_URL){
+		mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
+	}
+	
 exports.requestMDB = requestMDB;
 
 
