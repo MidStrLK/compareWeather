@@ -1,7 +1,8 @@
 // default to a 'localhost' configuration:
 var connection_string = '127.0.0.1:27017/compareweather';
 // if OPENSHIFT env variables are present, use the available connection info:
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+
+if(process && process.env && process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
     process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
     process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
@@ -10,13 +11,11 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 }
 
 var mongo = require('mongodb').MongoClient,											// include the mongodb module
-	//provide a sensible default for local development
-	db_name = 'weather',
     requestdata = require('../node/requestdata'),
-    Server = mongo.Server,
-    Db = mongo.Db,
-    server = new Server('localhost', 27017, {auto_reconnect: true}),	// create a server instance
-    db = new Db('weatherDb', server),									// ссылка на БД
+    //Server = mongo.Server,
+    //Db = mongo.Db,
+    //server = new Server('localhost', 27017, {auto_reconnect: true}),	// create a server instance
+    //db = new Db('weatherDb', server),									// ссылка на БД
     opendb,
     openconnection = [],
     name = 'weather';
