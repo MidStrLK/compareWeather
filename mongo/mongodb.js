@@ -9,7 +9,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     process.env.OPENSHIFT_APP_NAME;
 }
 
-var mongo = require(mongodb_connection_string),											// include the mongodb module
+var mongo = require(mongodb_connection_string).MongoClient,											// include the mongodb module
 	//provide a sensible default for local development
 	db_name = 'weather',
     requestdata = require('../node/requestdata'),
