@@ -68,7 +68,7 @@ function insertDB(data, callback){
         })
     }else{
         if(!callback) callback = function(err, result){
-            console.info('ARGUMENTS - ',arguments);
+            console.info('insert - err:', err, ', result: ', result.length);
         };
         openconnection[name].insert(data, callback);
     }
