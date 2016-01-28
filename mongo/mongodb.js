@@ -9,20 +9,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     process.env.OPENSHIFT_APP_NAME;
 }
 
-//load the Client interface
-var MongoClient = require('mongodb').MongoClient;
-// the client db connection scope is wrapped in a callback:
-MongoClient.connect('mongodb://'+connection_string, function(err, db) {
-    if(err) throw err;
-    var collection = db.collection('books').find().limit(10).toArray(function(err, docs) {
-        console.dir(docs);
-        db.close();
-    })
-});
-
-
-/*
-var mongo = require(mongodb_connection_string).MongoClient,											// include the mongodb module
+var mongo = require('mongodb').MongoClient,											// include the mongodb module
 	//provide a sensible default for local development
 	db_name = 'weather',
     requestdata = require('../node/requestdata'),
@@ -33,7 +20,7 @@ var mongo = require(mongodb_connection_string).MongoClient,											// include
     opendb,
     openconnection = [],
     name = 'weather';
-*/
+
 
 
 	
@@ -127,7 +114,7 @@ function removeDB(data, callback){
 
 /* Находим БД */
 function connectMongo(callback){
-    db.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
+    mongo.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
         if(!err) {
             opendb = db;
             callback();
