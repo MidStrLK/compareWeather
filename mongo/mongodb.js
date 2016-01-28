@@ -63,7 +63,7 @@ console.log('-MONGO-', path);
 /* Вставляем данные в БД */
 function insertDB(data, callback){
     if(!openconnection[name]){
-        collectionMongo(name, function(){
+        collectionMongo(function(){
             insertDB(name, data);
         })
     }else{
