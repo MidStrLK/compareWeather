@@ -9,14 +9,13 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "EDS",
+    "email": "elaginds@gmail.com"
   },
   "homepage": "http://www.openshift.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/MidStrLK/weather_compare/tree/master"
   },
 
   "engines": {
@@ -31,5 +30,8 @@
   "bundleDependencies": [],
 
   "private": true,
-  "main": "server.js"
+  "scripts": {
+		"start": "node index.js"
+  },
+  "main": "index.js"
 }
