@@ -72,6 +72,12 @@ Ext.define('APP.buttonPanel' , {
 		}
 	}],
 
+	afterRender: function(){
+		this.callParent();
+		console.info('ARGUMENTS - ',arguments);
+	},
+
+
 	getWeather: function(){
 		var me = this;
 		Ext.Ajax.request({
@@ -108,7 +114,6 @@ Ext.define('APP.buttonPanel' , {
 			res = [],
 			arr = [];
 		store.removeAll();
-		console.log('data',data);
 		data.forEach(function(val){
 			var flag = true;
 			res.forEach(function(vall){
@@ -220,7 +225,6 @@ Ext.define('APP.buttonPanel' , {
 
 
 	getActualGrid: function(){
-		console.log(this.up('desktop').down('actualGrid'));
 		return this.up('desktop').down('actualGrid')
 	},
 

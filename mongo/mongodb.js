@@ -33,7 +33,7 @@ exports.requestMDB = requestMDB;
 
 /* Главный запрос к БД, запускает нужные ф-ции */
 function requestMDB(path, callback, data){
-console.log('-MONGO-', path);
+console.log(new Date().toLocaleString(), '-MDB_request-', path);
     if(path === 'insert'){
         insertDB(data, callback);
     }else if(path === 'remove'){
@@ -68,7 +68,7 @@ function insertDB(data, callback){
         })
     }else{
         if(!callback) callback = function(err, result){
-            console.info('insert - err:', err, ', result: ', result.length);
+            console.info(new Date().toLocaleString(), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
         };
         openconnection[name].insert(data, callback);
     }
@@ -87,8 +87,9 @@ function selectDB(data, callback, reason){
                 if(callback) callback(err, docs);
             });
         }else{
-            cursor.toArray(function(err, docs) {
-                if(callback) callback(docs);
+            cursor.toArray(function(err, result) {
+                console.info(new Date().toLocaleString(), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
+                if(callback) callback(result);
             });
         }
 
@@ -117,6 +118,7 @@ function removeDB(data, callback){
 /* Находим БД */
 function connectMongo(callback){
     mongo.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
+        console.info(new Date().toLocaleString(), '-MDB- db connect - err:', err, ', result: ', !!db);
         if(!err) {
             opendb = db;
             callback();
@@ -139,6 +141,7 @@ function collectionMongo(callback){
         })
     }else{
         opendb.collection(name, function(err, collectionref) {		// ссылки на коллекции
+            console.info(new Date().toLocaleString(), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
             if(!err){
                 openconnection[name] = collectionref;
                 callback();
@@ -153,227 +156,3 @@ function disconnectMongo(db){
 }
 
 /*--- НИЗКИЙ УРОВЕНЬ ---*/
-
-
-
-/* Усреднить Ранние прогнозы на дату */
-function setTodayForecast(callback){
-
-    var date = new Date(),
-        requestData = {
-            daykey:     'day',
-            year:       date.getFullYear(),
-            month:      date.getMonth() + 1,
-            day:        date.getDate()
-        },
-        callbackWrapper = function(result){
-            var res = {},
-                resultArr = [],
-                avg = function(arr) {
-                    var arrLen = arr.length,
-                        result = 0;
-                    for (var i = 0; i < arrLen; i++) {
-                        result += arr[i];
-                    }
-                    return result / arrLen;
-                },
-                avgText = function(arr) {
-                    var arrLen = arr.length,
-                        res = {},
-                        num = 0,
-                        result = '';
-                    for (var i = 0; i < arrLen; i++) {
-                        if(!res[arr[i]]) res[arr[i]] = 0;
-                        res[arr[i]]++;
-                    }
-
-                    for(var key in res){
-                        if(res[key] > num){
-                            num = res[key];
-                            result = key;
-                        }
-                    }
-
-                    return result;
-                };
-
-
-            result.forEach(function(val){
-                if(!res[val.name]) res[val.name] = {};
-                if(!res[val.name][val.key]) res[val.name][val.key] = [];
-                if(!res[val.name][val.key][val.afterday]) res[val.name][val.key][val.afterday] = [];
-
-                res[val.name][val.key][val.afterday].push(val.value);
-            });
-
-            for(var reskey in res){
-                if(!res.hasOwnProperty(reskey)) return;
-
-                res[reskey]['temp'].forEach(function(vall, keyy){
-                    var tempDate = new Date(date);
-                    tempDate = new Date(tempDate.setDate(date.getDate() + keyy));
-                    resultArr.push({
-                        name:       reskey,
-                        key:        'temp',
-                        daykey:     'forecast',
-                        afterday:   -keyy,
-                        value:      avg(vall),
-                        year:       tempDate.getFullYear(),
-                        month:      tempDate.getMonth() + 1,
-                        day:        tempDate.getDate()
-                    })
-                });
-
-                res[reskey]['text'].forEach(function(vall, keyy){
-                    var textDate = new Date(date);
-                    textDate = new Date(textDate.setDate(date.getDate() + keyy));
-                    resultArr.push({
-                        name:       reskey,
-                        key:        'text',
-                        daykey:     'forecast',
-                        afterday:   -keyy,
-                        value:      avgText(vall),
-                        year:       textDate.getFullYear(),
-                        month:      textDate.getMonth() + 1,
-                        day:        textDate.getDate()
-                    })
-                });
-            }
-
-            insertDB(resultArr);
-
-            callback(resultArr.length);
-        };
-
-    selectDB(requestData, callbackWrapper);
-}
-
-/* Получить временные данные для прогноза на дату */
-function getTodayForecastDate() {
-    return {
-        daykey: 'forecast',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate()
-    }
-}
-
-/* Сравнить актуальную погоду с прогнозом */
-function getComparedWeather(data, callback){
-
-    var actual,
-        forecast,
-        callbackactual   = function(result){actual   = result;callbackAF();},
-        callbackforecast = function(result){forecast = result;callbackAF();},
-        callbackAF = function() {
-            if(!actual || !forecast) return;
-            if(!actual.length || !forecast.length) callback([]);
-
-            forecast.forEach(function(valF, keyF){
-                actual.forEach(function(valA,keyA){
-
-                    if(String(forecast[keyF]['value']).indexOf('(') !== -1) return;
-
-                    if(valF['name'] === valA['name'] && valF['key'] === valA['key']){
-                        if(valF['key'] === 'temp'){
-                            valF['tempDeviation'] = valF['value'] - valA['value'];
-                        }else if(valF['key'] === 'text'){
-                            if(valF['value'] === valA['value']){
-                                valF['tempDeviation'] = '100%'
-                            }else if(valF['value'].indexOf(valA['value']) != -1 || valA['value'].indexOf(valF['value']) != -1){
-                                valF['tempDeviation'] = '50%'
-                            }else valF['tempDeviation'] = '0%'
-
-                        }
-                        forecast[keyF]['value'] += ' (' + String(valF['tempDeviation']) + ')';
-                    }
-                })
-            });
-
-            callback(forecast)
-        };
-
-    selectDB(getForecastDate(data), callbackforecast);
-    selectDB(getActualDate(data),callbackactual);
-}
-
-/* Получить все нужные данные для нужного дня */
-function selectAll(data, callback){
-    var aData, fData, tData,
-        funcA = function(dataA){aData = dataA;funcAFT();},
-        funcF = function(dataF){fData = dataF;funcAFT();},
-        funcT = function(dataT){tData = dataT;funcAFT();},
-        funcAFT = function(){
-            if(!aData || !fData || !tData) return;
-            var res = {
-                actual:   aData,
-                forecast: fData,
-                today:    tData
-            };
-
-            callback(0, res);
-
-        };
-    selectDB(getActualDate(data), funcA);
-    selectDB(getForecastDate(data), funcF);
-    selectDB(getDestinyDate(data), funcT);
-}
-
-/* Получить временные данные для актуальной даты на весь день*/
-function getActualDayDate(){
-    return {
-        daykey: 'now',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate()
-    }
-}
-
-/* Получить временные данные для актуальной даты */
-function getActualDate(){
-    return {
-        daykey: 'now',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate(),
-        hour: (new Date()).getHours()
-    }
-}
-
-/* Получить временные данные для прогноза за весь день */
-function getForecastDayDate() {
-    return {
-        daykey: 'destiny',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate()
-    }
-}
-
-/* Получить временные данные для прогноза */
-function getForecastDate() {
-    return {
-        daykey: 'day',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate(),
-        hour: (new Date()).getHours()
-    }
-}
-
-/* Получить временные данные для прогноза */
-function getDestinyDate() {
-    return {
-        daykey: 'deviation',
-        year: (new Date()).getFullYear(),
-        month: (new Date()).getMonth() + 1,
-        day: (new Date()).getDate()
-    }
-}
-
-/* Получить временные данные для главного отклонения */
-function getMainDeviationData() {
-    return {
-        daykey: 'maindeviation'
-    }
-}

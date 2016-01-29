@@ -151,6 +151,7 @@ function findParameter($, tag, key, name, firstNumber, periodic){
 
 /* Отправляет данные на сервер */
 function sendData(data){
+	console.info(new Date().toLocaleString(), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
 	mongodb.requestMDB('insert', null, data);
 }
 

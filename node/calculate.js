@@ -12,6 +12,7 @@ function calc(callback){
 				},
 				deviationArr = getDeviation(dataA, dataF);
 
+			console.info(new Date().toLocaleString(), '-NODE_request- calculate - result: ', (deviationArr && deviationArr.length) ? deviationArr.length : 'error');
 			mongodb.requestMDB('insert', callbackWrapper, deviationArr);
 
 			setMainDeviation(deviationArr);
@@ -52,6 +53,7 @@ function setMainDeviation(arr){
 				})
 			});
 
+			console.info(new Date().toLocaleString(), '-NODE_request- main deviation - result: ', (data && data.length) ? data.length : 'error');
 			mongodb.requestMDB('insertMainDeviation', null, data);
 		}
 	};
