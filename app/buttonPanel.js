@@ -72,12 +72,6 @@ Ext.define('APP.buttonPanel' , {
 		}
 	}],
 
-	afterRender: function(){
-		this.callParent();
-		console.info('ARGUMENTS - ',arguments);
-	},
-
-
 	getWeather: function(){
 		var me = this;
 		Ext.Ajax.request({

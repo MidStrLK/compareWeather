@@ -1,1 +1,1 @@
-"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath "C:\WebServers\home\node.eds\db"
+"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath "C:\web\compareweather\db"

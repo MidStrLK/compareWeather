@@ -33,7 +33,7 @@ exports.requestMDB = requestMDB;
 
 /* Главный запрос к БД, запускает нужные ф-ции */
 function requestMDB(path, callback, data){
-console.log(new Date().toLocaleString(), '-MDB_request-', path);
+console.log(dateToLocal(getNowDate()), '-MDB_request-', path);
     if(path === 'insert'){
         insertDB(data, callback);
     }else if(path === 'remove'){
@@ -68,7 +68,7 @@ function insertDB(data, callback){
         })
     }else{
         if(!callback) callback = function(err, result){
-            console.info(new Date().toLocaleString(), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
+            console.info(dateToLocal(getNowDate()), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
         };
         openconnection[name].insert(data, callback);
     }
@@ -88,7 +88,7 @@ function selectDB(data, callback, reason){
             });
         }else{
             cursor.toArray(function(err, result) {
-                console.info(new Date().toLocaleString(), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
+                console.info(dateToLocal(getNowDate()), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
                 if(callback) callback(result);
             });
         }
@@ -115,10 +115,23 @@ function removeDB(data, callback){
 
 /*--- НИЗКИЙ УРОВЕНЬ ---*/
 
+function getNowDate(){
+    var date = new Date(),
+        remoteTimezoneOffset = -180;
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset() - remoteTimezoneOffset);
+    return date;
+}
+
+function dateToLocal(date){
+    return  date.getDate()  + '.' + date.getMonth()   + '.' + date.getFullYear() + ' ' +
+        date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+}
+
+
 /* Находим БД */
 function connectMongo(callback){
     mongo.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
-        console.info(new Date().toLocaleString(), '-MDB- db connect - err:', err, ', result: ', !!db);
+        console.info(dateToLocal(getNowDate()), '-MDB- db connect - err:', err, ', result: ', !!db);
         if(!err) {
             opendb = db;
             callback();
@@ -141,7 +154,7 @@ function collectionMongo(callback){
         })
     }else{
         opendb.collection(name, function(err, collectionref) {		// ссылки на коллекции
-            console.info(new Date().toLocaleString(), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
+            console.info(dateToLocal(getNowDate()), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
             if(!err){
                 openconnection[name] = collectionref;
                 callback();

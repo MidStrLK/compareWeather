@@ -12,7 +12,7 @@ function calc(callback){
 				},
 				deviationArr = getDeviation(dataA, dataF);
 
-			console.info(new Date().toLocaleString(), '-NODE_request- calculate - result: ', (deviationArr && deviationArr.length) ? deviationArr.length : 'error');
+			console.info(dateToLocal(getNowDate()), '-NODE_request- calculate - result: ', (deviationArr && deviationArr.length) ? deviationArr.length : 'error');
 			mongodb.requestMDB('insert', callbackWrapper, deviationArr);
 
 			setMainDeviation(deviationArr);
@@ -53,7 +53,7 @@ function setMainDeviation(arr){
 				})
 			});
 
-			console.info(new Date().toLocaleString(), '-NODE_request- main deviation - result: ', (data && data.length) ? data.length : 'error');
+			console.info(dateToLocal(getNowDate()), '-NODE_request- main deviation - result: ', (data && data.length) ? data.length : 'error');
 			mongodb.requestMDB('insertMainDeviation', null, data);
 		}
 	};
@@ -149,6 +149,18 @@ function getAverageValueTemp(arr){
 	arr[0].value = result / arrLen;
 
 	return arr[0];
+}
+
+function getNowDate(){
+	var date = new Date(),
+			remoteTimezoneOffset = -180;
+	date.setMinutes(date.getMinutes() + date.getTimezoneOffset() - remoteTimezoneOffset);
+	return date;
+}
+
+function dateToLocal(date){
+	return  date.getDate()  + '.' + date.getMonth()   + '.' + date.getFullYear() + ' ' +
+			date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 }
 
 exports.calc = calc;

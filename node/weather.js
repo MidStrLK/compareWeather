@@ -151,8 +151,20 @@ function findParameter($, tag, key, name, firstNumber, periodic){
 
 /* Отправляет данные на сервер */
 function sendData(data){
-	console.info(new Date().toLocaleString(), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
+	console.info(dateToLocal(getNowDate()), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
 	mongodb.requestMDB('insert', null, data);
+}
+
+function getNowDate(){
+	var date = new Date(),
+		remoteTimezoneOffset = -180;
+	date.setMinutes(date.getMinutes() + date.getTimezoneOffset() - remoteTimezoneOffset);
+	return date;
+}
+
+function dateToLocal(date){
+	return  date.getDate()  + '.' + date.getMonth()   + '.' + date.getFullYear() + ' ' +
+			date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 }
 
 /* передача на сервер функции */
