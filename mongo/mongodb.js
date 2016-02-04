@@ -12,6 +12,7 @@ if(process && process.env && process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 
 var mongo = require('mongodb').MongoClient,											// include the mongodb module
     requestdata = require('../node/requestdata'),
+    formatDate = require('../formatdate'),
     //Server = mongo.Server,
     //Db = mongo.Db,
     //server = new Server('localhost', 27017, {auto_reconnect: true}),	// create a server instance
@@ -33,7 +34,7 @@ exports.requestMDB = requestMDB;
 
 /* Главный запрос к БД, запускает нужные ф-ции */
 function requestMDB(path, callback, data){
-console.log(dateToLocal(getNowDate()), '-MDB_request-', path);
+console.log(formatDate.dateToLocal(), '-MDB_request-', path);
     if(path === 'insert'){
         insertDB(data, callback);
     }else if(path === 'remove'){
@@ -68,7 +69,7 @@ function insertDB(data, callback){
         })
     }else{
         if(!callback) callback = function(err, result){
-            console.info(dateToLocal(getNowDate()), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
+            console.info(formatDate.dateToLocal(), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
         };
         openconnection[name].insert(data, callback);
     }
@@ -88,7 +89,7 @@ function selectDB(data, callback, reason){
             });
         }else{
             cursor.toArray(function(err, result) {
-                console.info(dateToLocal(getNowDate()), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
+                console.info(formatDate.dateToLocal(), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
                 if(callback) callback(result);
             });
         }
@@ -115,23 +116,10 @@ function removeDB(data, callback){
 
 /*--- НИЗКИЙ УРОВЕНЬ ---*/
 
-function getNowDate(){
-    var date = new Date(),
-        remoteTimezoneOffset = -180;
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset() - remoteTimezoneOffset);
-    return date;
-}
-
-function dateToLocal(date){
-    return  date.getDate()  + '.' + date.getMonth()   + '.' + date.getFullYear() + ' ' +
-        date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-}
-
-
 /* Находим БД */
 function connectMongo(callback){
     mongo.connect('mongodb://'+connection_string, function(err, db) {												// connect to database server
-        console.info(dateToLocal(getNowDate()), '-MDB- db connect - err:', err, ', result: ', !!db);
+        console.info(formatDate.dateToLocal(), '-MDB- db connect - err:', err, ', result: ', !!db);
         if(!err) {
             opendb = db;
             callback();
@@ -154,7 +142,7 @@ function collectionMongo(callback){
         })
     }else{
         opendb.collection(name, function(err, collectionref) {		// ссылки на коллекции
-            console.info(dateToLocal(getNowDate()), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
+            console.info(formatDate.dateToLocal(), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
             if(!err){
                 openconnection[name] = collectionref;
                 callback();
