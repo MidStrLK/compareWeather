@@ -63,7 +63,7 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
 
 /* Вставляем данные в БД */
 function insertDB(data, callback){
-    if(!openconnection[name]){
+    if(!openconnection[name] || !openconnection[name].insert){
         collectionMongo(function(){
             insertDB(name, data);
         })
@@ -77,7 +77,7 @@ function insertDB(data, callback){
 
 /* Получаем данные из БД */
 function selectDB(data, callback, reason){
-    if(!openconnection[name]){
+    if(!openconnection[name] || !openconnection[name].find){
         collectionMongo(function(){
             selectDB(data, callback, reason);
         })
@@ -99,7 +99,7 @@ function selectDB(data, callback, reason){
 
 /* Удаление записей из БД */
 function removeDB(data, callback){
-    if(!openconnection[name]){
+    if(!openconnection[name] || !openconnection[name].remove){
         collectionMongo(function(){
             removeDB(data, callback);
         })

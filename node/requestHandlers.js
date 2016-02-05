@@ -1,5 +1,4 @@
-var querystring = require("querystring"),
-    mongodb     = require("../mongo/mongodb"),
+var mongodb     = require("../mongo/mongodb"),
     fs          = require("fs"),
     index       = fs.readFileSync('./index.html'),
     weather     = require("./weather"),

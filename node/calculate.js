@@ -9,7 +9,7 @@ function calc(callback){
 		funcAF = function() {
 			if(!dataA || !dataF) return;
 			var callbackWrapper = function(err, result) {
-					callback(err, result);
+					if(callback && typeof callback === 'function') callback(err, result);
 				},
 				deviationArr = getDeviation(dataA, dataF);
 

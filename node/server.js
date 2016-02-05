@@ -2,14 +2,15 @@ var http = require("http"),
     url = require("url"),
     weather = require("./weather"),
     timer = require("./timer"),
-	server_port = process.env.OPENSHIFT_NODEJS_PORT || 8888,
+    formatDate = require('../formatdate'),
+	server_port = process.env.OPENSHIFT_NODEJS_PORT || 3003,
 	server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 function start(route, handle) {
   function onRequest(request, response) {
     var postData = "";
     var pathname = url.parse(request.url).pathname;
-    console.log("--" + pathname);
+    console.log(formatDate.dateToLocal() + "--" + pathname);
 
     request.setEncoding("utf8");
 
