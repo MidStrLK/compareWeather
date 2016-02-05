@@ -10,9 +10,9 @@ function start(){
 
 		console.log('>>> ' + formatDate.dateToLocal(date) + ' <<<');
 
-			if(minutes > 0 && minutes < 5) weather.getAllWeather();
+			if(minutes >= 0 && minutes < 6) weather.getAllWeather();
 
-			if(	minutes > 40 && minutes < 45 && hours == 23) calculate.calc();
+			if(	minutes >= 40 && minutes < 46 && hours == 23) calculate.calc();
 		};
 
 	setInterval(func, 300000); // 5 мин = 300 000
