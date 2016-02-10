@@ -1,7 +1,7 @@
 var mongodb  = require("../mongo/mongodb"),
     formatDate = require('../formatdate');
 
-function calc(callback){
+function calc(callback, COLLECTION){
 	var dataA,
 		dataF,
 		funcA = function(data) {dataA = data; funcAF()},
@@ -14,19 +14,19 @@ function calc(callback){
 				deviationArr = getDeviation(dataA, dataF);
 
 			console.info(formatDate.dateToLocal(), '-NODE_request- calculate - result: ', (deviationArr && deviationArr.length) ? deviationArr.length : 'error');
-			mongodb.requestMDB('insert', callbackWrapper, deviationArr);
+			mongodb.requestMDB('insert', callbackWrapper, deviationArr, COLLECTION);
 
-			setMainDeviation(deviationArr);
+			setMainDeviation(deviationArr, COLLECTION);
 
 		};
 
-	mongodb.requestMDB('selectDayActual',   funcA);
-	mongodb.requestMDB('selectDayForecast', funcF);
+	mongodb.requestMDB('selectDayActual',   funcA, null, COLLECTION);
+	mongodb.requestMDB('selectDayForecast', funcF, null, COLLECTION);
 
 }
 
 /* Считает отклонение за все время */
-function setMainDeviation(arr){
+function setMainDeviation(arr, COLLECTION){
 	var func = function(data){
 		if(!data.length){
 			arr.forEach(function(val, key){
@@ -39,7 +39,7 @@ function setMainDeviation(arr){
 				if(arr[key]['year']) 	delete arr[key]['year'];
 				if(arr[key]['_id']) 	delete arr[key]['_id'];
 			});
-			mongodb.requestMDB('insert', null, arr)
+			mongodb.requestMDB('insert', null, arr, COLLECTION)
 		}else{
 			data.forEach(function(valO, keyO){
 				arr.forEach(function(valN, keyN){
@@ -55,10 +55,10 @@ function setMainDeviation(arr){
 			});
 
 			console.info(formatDate.dateToLocal(), '-NODE_request- main deviation - result: ', (data && data.length) ? data.length : 'error');
-			mongodb.requestMDB('insertMainDeviation', null, data);
+			mongodb.requestMDB('insertMainDeviation', null, data, COLLECTION);
 		}
 	};
-	mongodb.requestMDB('getMainDeviation', func);
+	mongodb.requestMDB('getMainDeviation', func, null, COLLECTION);
 }
 
 /* Подсчет ошибки расхождения */

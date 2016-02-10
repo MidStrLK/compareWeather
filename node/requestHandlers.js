@@ -5,7 +5,8 @@ var mongodb     = require("../mongo/mongodb"),
     calculate   = require("./calculate"),
     selectall   = require("./selectall");
 
-function submitRequest(response, handle, pathname, postData){
+function submitRequest(response, handle, pathname, postData, COLLECTION){
+
   if(!pathname || !response){
     response.writeHead(500, { 'Content-Type': 'application/json', 'charset':'utf-8' });
     response.write('Ошибка в запросе ' + pathname);
@@ -34,13 +35,13 @@ function submitRequest(response, handle, pathname, postData){
           };
 
       if (pathname === '/insert') {
-          weather.getAllWeather(func);
+          weather.getAllWeather(func, COLLECTION);
       }else if (pathname === '/testCalculate') {
-          calculate.calc(func);
+          calculate.calc(func, COLLECTION);
       }else if (pathname === '/select') {
-          selectall.select(postData, func)
+          selectall.select(postData, func, COLLECTION)
       } else if (mongodb.requestMDB) {
-          mongodb.requestMDB(path, func);
+          mongodb.requestMDB(path, func, null, COLLECTION);
       } else {
           response.writeHead(500, {'Content-Type': 'application/json', 'charset': 'utf-8'});
           response.write('Ошибка в запросе к БД ' + path);

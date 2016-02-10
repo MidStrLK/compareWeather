@@ -1,7 +1,7 @@
 var mongodb  = require("../mongo/mongodb"),
 	requestdata = require('./requestdata');
 
-function select(postData, callback){
+function select(postData, callback, COLLECTION){
 	if(postData) postData = JSON.parse(postData);
 	var aData, fData, tData, dData,
 		date = (postData && postData.date) ? new Date(postData.date) : new Date(),
@@ -36,10 +36,10 @@ function select(postData, callback){
 
 		};
 
-	mongodb.requestMDB('select', funcA, requestdata.getActualDate(date));
-	mongodb.requestMDB('select', funcF, requestdata.getForecastDate(date));
-	mongodb.requestMDB('select', funcT, requestdata.getDestinyDate(date));
-	mongodb.requestMDB('select', funcD, requestdata.getMainDeviationData());
+	mongodb.requestMDB('select', funcA, requestdata.getActualDate(date), 	COLLECTION);
+	mongodb.requestMDB('select', funcF, requestdata.getForecastDate(date), 	COLLECTION);
+	mongodb.requestMDB('select', funcT, requestdata.getDestinyDate(date), 	COLLECTION);
+	mongodb.requestMDB('select', funcD, requestdata.getMainDeviationData(), COLLECTION);
 }
 
 exports.select = select;

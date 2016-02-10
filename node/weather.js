@@ -69,16 +69,16 @@ function getFullRowDay(data){
 }
 
 /* Запрашивает погоду из всех источников */
-function getAllWeather(http){
+function getAllWeather(http, COLLECTION){
 	if(manifest && manifest.list){
 		for(var key in manifest.list){
-			getWeather(manifest.list[key])
+			getWeather(manifest.list[key], COLLECTION)
 		}
 	}
 }
 
 /* Запрос на сервер и формирование объекта */
-function getWeather(data) {
+function getWeather(data, COLLECTION) {
 	var params = data.params,
 		name = data.name,
 		periodic = data.periodic;
@@ -90,7 +90,7 @@ function getWeather(data) {
 				var $ = cheerio.load(body);
 
 				for(var key in subParams){
-					findParameter($, subParams[key], key, name, inc, periodic)
+					findParameter($, subParams[key], key, name, inc, periodic, COLLECTION)
 				}
 			});
 		};
@@ -108,7 +108,7 @@ function getWeather(data) {
 }
 
 /* Ищет параметры для каждого случая */
-function findParameter($, tag, key, name, firstNumber, periodic){
+function findParameter($, tag, key, name, firstNumber, periodic, COLLECTION){
 	var intArr = [],
 		resArr = [],
 		daynum = firstNumber || 0;
@@ -146,14 +146,15 @@ function findParameter($, tag, key, name, firstNumber, periodic){
 
 	});
 
-	sendData(resArr);
+	sendData(resArr, COLLECTION);
 
 }
 
 /* Отправляет данные на сервер */
-function sendData(data){
+function sendData(data, COLLECTION){
+	//console.info('COLLECTION - ',COLLECTION);
 	console.info(formatDate.dateToLocal(), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
-	mongodb.requestMDB('insert', null, data);
+	mongodb.requestMDB('insert', null, data, COLLECTION);
 }
 
 

@@ -24,7 +24,8 @@ var mongo = require('mongodb').MongoClient,											// include the mongodb mod
 
 
 	
-exports.requestMDB = requestMDB;
+exports.requestMDB       = requestMDB;
+exports.getCollectionMDB = collectionMongo;
 
 
 
@@ -33,26 +34,33 @@ exports.requestMDB = requestMDB;
 /*--- ВЫСШИЙ УРОВЕНЬ ---*/
 
 /* Главный запрос к БД, запускает нужные ф-ции */
-function requestMDB(path, callback, data){
+function requestMDB(path, callback, data, COLLECTION){
 console.log(formatDate.dateToLocal(), '-MDB_request-', path);
     if(path === 'insert'){
-        insertDB(data, callback);
+        insertDB(data, callback, COLLECTION);
+
     }else if(path === 'remove'){
-        removeDB(data, callback)
+        removeDB(data, callback, COLLECTION)
+
     }else if(path === 'count'){
-        selectDB(null, callback, 'count')
+        selectDB(null, callback, COLLECTION)
+
     }else if(path === 'select'){
-        selectDB(data, callback)
+        selectDB(data, callback, COLLECTION)
+
     }else if(path === 'selectDayActual'){
-        selectDB(requestdata.getActualDayDate(), callback)
+        selectDB(requestdata.getActualDayDate(), callback, COLLECTION)
+
     }else if(path === 'selectDayForecast'){
-        selectDB(requestdata.getForecastDayDate(), callback)
+        selectDB(requestdata.getForecastDayDate(), callback, COLLECTION)
+
     }else if(path === 'getMainDeviation'){
-        selectDB(requestdata.getMainDeviationData(), callback)
+        selectDB(requestdata.getMainDeviationData(), callback, COLLECTION)
+
     }else if(path === 'insertMainDeviation'){
         removeDB(requestdata.getMainDeviationData(),function(err, result){
-            if(!err) insertDB(data, callback);
-        });
+            if(!err) insertDB(data, callback, COLLECTION);
+        }, COLLECTION);
     }
 }
 /*--- ВЫСШИЙ УРОВЕНЬ ---*/
@@ -62,8 +70,11 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
 /*--- СРЕДНИЙ УРОВЕНЬ ---*/
 
 /* Вставляем данные в БД */
-function insertDB(data, callback){
-    if(!openconnection[name] || !openconnection[name].insert){
+function insertDB(data, callback, COLLECTION){
+
+    if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
+
+    if(!COLLECTION || !COLLECTION.insert){
         collectionMongo(function(){
             insertDB(name, data);
         })
@@ -71,19 +82,21 @@ function insertDB(data, callback){
         if(!callback) callback = function(err, result){
             console.info(formatDate.dateToLocal(), '-MDB_reply- insert - err:', err, ', result: ', (result && result.length) ? result.length : '');
         };
-        openconnection[name].insert(data, callback);
+        COLLECTION.insert(data, callback);
     }
 }
 
 /* Получаем данные из БД */
-function selectDB(data, callback, reason){
-    if(!openconnection[name] || !openconnection[name].find){
-        collectionMongo(function(){
-            selectDB(data, callback, reason);
-        })
+function selectDB(data, callback, COLLECTION){
+    //if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
+//console.info('COLLECTION - ',COLLECTION);
+    if(!COLLECTION || !COLLECTION.find){
+        //collectionMongo(function(){
+        //    selectDB(data, callback);
+        //})
     }else{
-        var cursor = openconnection[name].find(data);
-        if(reason === 'count'){
+        var cursor = COLLECTION.find(data);
+        if(data === null){
             cursor.count(function(err, docs) {
                 if(callback) callback(err, docs);
             });
@@ -98,15 +111,17 @@ function selectDB(data, callback, reason){
 }
 
 /* Удаление записей из БД */
-function removeDB(data, callback){
-    if(!openconnection[name] || !openconnection[name].remove){
+function removeDB(data, callback, COLLECTION){
+    if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
+
+    if(!COLLECTION || !COLLECTION.remove){
         collectionMongo(function(){
             removeDB(data, callback);
         })
     }else{
         if(data){
-            openconnection[name].remove(data, callback)
-        }else openconnection[name].remove(callback)
+            COLLECTION.remove(data, callback)
+        }else COLLECTION.remove(callback)
     }
 }
 
@@ -125,12 +140,6 @@ function connectMongo(callback){
             callback();
         }
     });
-    //db.open(function(err, db) {												// connect to database server
-    //    if(!err) {
-    //        opendb = db;
-    //        callback();
-    //    }
-    //});
 }
 
 /* Находим нужную коллекцию */
@@ -145,7 +154,7 @@ function collectionMongo(callback){
             console.info(formatDate.dateToLocal(), '-MDB- collection connect - err:', err, ', result: ', !!collectionref);
             if(!err){
                 openconnection[name] = collectionref;
-                callback();
+                callback(collectionref);
             }
         });
     }
