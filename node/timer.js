@@ -1,21 +1,31 @@
-var weather = require("./weather"),
-	calculate = require("./calculate"),
-	formatDate = require('../formatdate');
+var weather    = require("./weather"),
+	calculate  = require("./calculate"),
+	formatDate = require('../formatdate'),
+    interval   = 5,
+    lastWeather,
+    lastCalc;
 
 function start(){
 	var func = function() {
-			var date = formatDate.getNowDate(),
-				hours = date.getHours(),
+			var date    = formatDate.getNowDate(),
+                day     = date.getDate(),
+				hours   = date.getHours(),
 				minutes = date.getMinutes();
 
 		console.log('>>> ' + formatDate.dateToLocal(date) + ' <<<');
 
-			if(minutes >= 0 && minutes < 6) weather.getAllWeather();
+			if(lastWeather !== hours) {
+                lastWeather = hours;
+                weather.getAllWeather();
+            }
 
-			if(	minutes >= 40 && minutes < 46 && hours == 23) calculate.calc();
+			if(hours == 23 && lastCalc !== day) {
+                lastCalc = day;
+                calculate.calc();
+            }
 		};
 
-	setInterval(func, 300000); // 5 мин = 300 000
+	setInterval(func, interval*60000); // 5 мин = 300 000
 }
 
 exports.start = start;

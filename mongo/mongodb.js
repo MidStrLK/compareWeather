@@ -71,7 +71,6 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
 
 /* Вставляем данные в БД */
 function insertDB(data, callback, COLLECTION){
-
     if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
 
     if(!COLLECTION || !COLLECTION.insert){
@@ -88,18 +87,19 @@ function insertDB(data, callback, COLLECTION){
 
 /* Получаем данные из БД */
 function selectDB(data, callback, COLLECTION){
-    //if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
-//console.info('COLLECTION - ',COLLECTION);
+    if(!COLLECTION && openconnection[name]) COLLECTION = openconnection[name];
     if(!COLLECTION || !COLLECTION.find){
-        //collectionMongo(function(){
-        //    selectDB(data, callback);
-        //})
+        collectionMongo(function(){
+            selectDB(data, callback);
+        })
     }else{
         var cursor = COLLECTION.find(data);
         if(data === null){
-            cursor.count(function(err, docs) {
-                if(callback) callback(err, docs);
-            });
+            console.info(formatDate.dateToLocal(), '-MDB_reply- count');
+            if(callback) countCategory(cursor, callback);
+            //cursor.count(function(err, docs) {
+            //    if(callback) callback(err, countCategory(docs));
+            //});
         }else{
             cursor.toArray(function(err, result) {
                 console.info(formatDate.dateToLocal(), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
@@ -130,6 +130,23 @@ function removeDB(data, callback, COLLECTION){
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 /*--- НИЗКИЙ УРОВЕНЬ ---*/
+
+/* Подсчет кол-ва записей */
+function countCategory(cursor, callback){
+    var res = {error: []};
+    cursor.each(function(err, val){
+        if(val === null){
+            callback(null, res);
+        }else if(!val || !val.name || !val.daykey || err){
+            res.error.push(val)
+        }else{
+            if(!res[val.name]) res[val.name] = {};
+            if(!res[val.name][val.daykey]) res[val.name][val.daykey] = 0;
+            res[val.name][val.daykey]++
+        }
+    });
+
+}
 
 /* Находим БД */
 function connectMongo(callback){

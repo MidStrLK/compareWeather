@@ -32,7 +32,29 @@ Ext.define('APP.buttonPanel' , {
 				url: '/count',
 				method: 'GET',
 				callback: function (opts, success, response) {
-					me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + response.responseText + ' записей');
+                    if(success){
+                        var data = JSON.parse(response.responseText);
+                        if(typeof data === 'string'){
+                            me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + response.responseText + ' записей');
+                        }else{
+                            var text = '',
+                                obj = {};
+                            if(data.error && data.error.length) text = 'Ошибки: ' + data.error.length + '. ';
+                            for(var key in data){
+                                if(key !== 'error'){
+                                    for(var key2 in data[key]){
+                                        if(!obj[key2]) obj[key2] = 0;
+                                        obj[key2] += data[key][key2];
+                                    }
+                                }
+                            }
+
+                            text += JSON.stringify(obj).replace(/\"/g,'').replace(/\{/g,'').replace(/}/g,'').replace(/,/g,', ');
+                            me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + text + ' записей');
+
+                        }
+                    }
+
 				}
 			})
 		}
