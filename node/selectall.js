@@ -27,9 +27,10 @@ function select(postData, callback, COLLECTION){
 			});
 
 			var res = {
-				actual:   aData,
-				forecast: fData,
-				today:    tData
+				actual:     aData,
+				forecast:   fData,
+				today:      tData,
+				deviation:  dData
 			};
 
 			callback(0, res);
