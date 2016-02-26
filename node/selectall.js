@@ -5,10 +5,10 @@ function select(postData, callback, COLLECTION){
 	if(postData) postData = JSON.parse(postData);
 	var aData, fData, tData, dData,
 		date = (postData && postData.date) ? new Date(postData.date) : new Date(),
-		funcA = function(dataA){aData = dataA;funcAFT();},
-		funcF = function(dataF){fData = dataF;funcAFT();},
-		funcT = function(dataT){tData = dataT;funcAFT();},
-		funcD = function(dataD){dData = dataD;funcAFT();},
+		funcA = function(err, dataA){aData = dataA;funcAFT();},
+		funcF = function(err, dataF){fData = dataF;funcAFT();},
+		funcT = function(err, dataT){tData = dataT;funcAFT();},
+		funcD = function(err, dataD){dData = dataD;funcAFT();},
 		funcAFT = function(){
 			if(!aData || !fData || !tData || !dData) return;
 

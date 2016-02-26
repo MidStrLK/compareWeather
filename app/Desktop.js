@@ -39,7 +39,7 @@ Ext.define('APP.Desktop' , {
 			},{
 				xtype: 'buttonPanel',
 				cmargins: '0 0 5 0',
-				height: 50,
+				height: 80,
 				flex: 1,
 				hidden: true
 			},{
@@ -63,7 +63,9 @@ Ext.define('APP.Desktop' , {
 	testPass: function(field){
 		var password = this.MD5(field.getValue());
 		field.setValue('');
-		if(password === '42cfbd491c0a8bda8773458dc07b2119'){
+		console.info('password - ',password);
+		//if(password === '42cfbd491c0a8bda8773458dc07b2119'){
+		if(password === '5cfdb867e96374c7883b31d6928cc4cb'){
 			this.down('[name="passfield"]').hide();
 			this.down('buttonPanel').show();
 		}

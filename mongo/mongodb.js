@@ -36,6 +36,13 @@ exports.getCollectionMDB = collectionMongo;
 /* Главный запрос к БД, запускает нужные ф-ции */
 function requestMDB(path, callback, data, COLLECTION){
 console.log(formatDate.dateToLocal(), '-MDB_request-', path);
+
+    if(data){
+        if(data.year)   data.year   = +data.year;
+        if(data.month)  data.month  = +data.month;
+        if(data.day)    data.day    = +data.day;
+    }
+
     if(path === 'insert'){
         insertDB(data, callback, COLLECTION);
 
@@ -56,6 +63,9 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
 
     }else if(path === 'getMainDeviation'){
         selectDB(requestdata.getMainDeviationData(), callback, COLLECTION)
+
+    }else if(path === 'mongorequest'){
+        selectDB(data, callback, COLLECTION)
 
     }else if(path === 'insertMainDeviation'){
         removeDB(requestdata.getMainDeviationData(),function(err, result){
@@ -103,7 +113,7 @@ function selectDB(data, callback, COLLECTION){
         }else{
             cursor.toArray(function(err, result) {
                 console.info(formatDate.dateToLocal(), '-MDB_reply- select - err:', err, ', result: ', (result && result.length) ? result.length : '');
-                if(callback) callback(result);
+                if(callback) callback(err, result);
             });
         }
 

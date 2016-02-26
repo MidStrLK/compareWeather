@@ -18,6 +18,7 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
     }else {
       var path = pathname.replace(/\//g, ''),
           func = function (err, result) {
+              console.info('err, result - ',err, result.length);
             var res = 0,
                 httpsc = 200;
             if (err) {
@@ -40,6 +41,9 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
           calculate.calc(func, COLLECTION);
       }else if (pathname === '/select') {
           selectall.select(postData, func, COLLECTION)
+      }else if (pathname === '/mongorequest') {
+          console.info('postData - ',postData);
+          mongodb.requestMDB(path, func, JSON.parse(postData), COLLECTION);
       } else if (mongodb.requestMDB) {
           mongodb.requestMDB(path, func, null, COLLECTION);
       } else {

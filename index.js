@@ -9,5 +9,6 @@ handle["/insert"]           = requestHandlers.submitRequest;    // Посчит�
 handle["/select"]           = requestHandlers.submitRequest;    // Получить погоду на сегодня
 handle["/count"]            = requestHandlers.submitRequest;    // Тест БД
 handle["/testCalculate"]    = requestHandlers.submitRequest;    // Тест БД
+handle["/mongorequest"]     = requestHandlers.submitRequest;    // Тест БД
 
 server.start(router.route, handle);

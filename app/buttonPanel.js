@@ -9,6 +9,30 @@ Ext.define('APP.buttonPanel' , {
 	},
 
 	items: [{
+		xtype: 'textfield',
+        listeners:{
+            specialkey: function(field, e) {
+                if (e.getKey() == e.ENTER) {
+
+                    var me = this.up('buttonPanel'),
+                        value = field.getValue();
+                    if(!value) return;
+
+                    value = '{"' + value.replace(/\s/g, '","').replace(/=/g, '":"') + '"}';
+                    console.info('value - ',value);
+                    Ext.Ajax.request({
+                        url: '/mongorequest',
+                        method: 'POST',
+                        jsonData: value,
+                        callback: function (opts, success, response) {
+                            console.info('response - ',response);
+                            me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + (JSON.parse(response.responseText)).length + ' записей');
+                        }
+                    })
+                }
+            }
+        }
+	},{
 		xtype: 'button',
 		name: 'testCalcDB',
 		text: 'Тест расчета БД',
