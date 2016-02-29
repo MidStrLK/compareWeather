@@ -20,7 +20,7 @@ function start(COLLECTION){
                 weather.getAllWeather(null, COLLECTION);
             }
 
-			if(hours == 12 && lastCalc !== day) {
+			if(hours == 13 && lastCalc !== day) {
                 lastCalc = day;
                 console.log('CALCULATE attempt');
                 calculate.calc(null, COLLECTION);
