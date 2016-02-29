@@ -19,6 +19,17 @@ function routeRouter(route, handle, pathname, response, postData){
     }
 }
 
+function startTimer(){
+    if(COLLECTION){
+        timer.start(COLLECTION);
+    }else{
+        mongodb.getCollectionMDB(function(COLL){
+            COLLECTION = COLL;
+            timer.start(COLLECTION);
+        })
+    }
+}
+
 function start(route, handle) {
   function onRequest(request, response) {
       var postData = "";
@@ -44,7 +55,8 @@ function start(route, handle) {
 		console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 	});
 
-  timer.start();
+
+    startTimer();
 
 }
 

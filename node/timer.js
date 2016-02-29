@@ -5,7 +5,7 @@ var weather    = require("./weather"),
     lastWeather,
     lastCalc;
 
-function start(){
+function start(COLLECTION){
 	var func = function() {
 			var date    = formatDate.getNowDate(),
                 day     = date.getDate(),
@@ -16,12 +16,14 @@ function start(){
 
 			if(lastWeather !== hours) {
                 lastWeather = hours;
-                weather.getAllWeather();
+				console.log('GETALLWEATHER attempt');
+                weather.getAllWeather(null, COLLECTION);
             }
 
-			if(hours == 23 && lastCalc !== day) {
+			if(hours == 12 && lastCalc !== day) {
                 lastCalc = day;
-                calculate.calc();
+                console.log('CALCULATE attempt');
+                calculate.calc(null, COLLECTION);
             }
 		};
 

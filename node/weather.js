@@ -69,7 +69,7 @@ function getFullRowDay(data){
 }
 
 /* Запрашивает погоду из всех источников */
-function getAllWeather(http, COLLECTION){
+function getAllWeather(callback, COLLECTION){
 	if(manifest && manifest.list){
 		for(var key in manifest.list){
 			getWeather(manifest.list[key], COLLECTION)
