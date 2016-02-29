@@ -5,7 +5,7 @@ Ext.define('APP.buttonPanel' , {
 	height: 200,
 
 	defaults: {
-		margin: 10
+		margin: 5
 	},
 
 	items: [{
@@ -32,6 +32,55 @@ Ext.define('APP.buttonPanel' , {
                 }
             }
         }
+	},{
+		xtype: 'button',
+		name: 'testInterval',
+		text: 'Запустить таймер',
+		handler: function () {
+			var me = this.up('buttonPanel'),
+                intRequest = function(){
+                    Ext.Ajax.request({
+                        url: '/count',
+                        method: 'GET',
+                        callback: function (opts, success, response) {
+                            if(success){
+                                var data = JSON.parse(response.responseText);
+                                if(typeof data === 'string'){
+                                    me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + response.responseText + ' записей');
+                                }else{
+                                    var text = '',
+                                        obj = {};
+                                    if(data.error && data.error.length) text = 'Ошибки: ' + data.error.length + '. ';
+                                    for(var key in data){
+                                        if(key !== 'error'){
+                                            for(var key2 in data[key]){
+                                                if(!obj[key2]) obj[key2] = 0;
+                                                obj[key2] += data[key][key2];
+                                            }
+                                        }
+                                    }
+
+                                    text += JSON.stringify(obj).replace(/\"/g,'').replace(/\{/g,'').replace(/}/g,'').replace(/,/g,', ');
+                                    me.getDesktopLabel().setText(response.statusText + ' ' + response.status + '. В БД ' + text + ' записей');
+
+                                }
+                            }
+
+                        }
+                    })
+                };
+
+            if(me.interval){
+                clearInterval(me.interval);
+                if(me.interval) delete me.interval;
+                this['setText']('Запустить таймер');
+            }else{
+                me.interval = setInterval(intRequest, 1800000);
+                this['setText']('Остановить таймер');
+            }
+
+
+		}
 	},{
 		xtype: 'button',
 		name: 'testCalcDB',
