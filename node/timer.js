@@ -12,7 +12,7 @@ function start(COLLECTION){
 				hours   = date.getHours(),
 				minutes = date.getMinutes();
 
-		console.log('>>> ' + formatDate.dateToLocal(date) + ' <<<');
+		console.log('>>> ' + formatDate.dateToLocal(date) + ' <<<  (weather hours | calc day == ', lastWeather, hours, ' | ', lastCalc, day);
 
 			if(lastWeather !== hours) {
                 lastWeather = hours;
