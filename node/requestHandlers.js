@@ -18,7 +18,6 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
     }else {
       var path = pathname.replace(/\//g, ''),
           func = function (err, result) {
-              console.info('err, result - ',err, result.length);
             var res = 0,
                 httpsc = 200;
             if (err) {
