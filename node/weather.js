@@ -1,9 +1,9 @@
-var manifest = require("../manifest"),
-	request  = require("request"),
-	cheerio  = require("cheerio"),
-	utf8     = require('utf8'),
-	mongodb  = require("../mongo/mongodb"),
-	formatDate = require('../formatdate');
+var manifest 	= require("../manifest"),
+	request  	= require("request"),
+	cheerio  	= require("cheerio"),
+	utf8     	= require('utf8'),
+	mongodb  	= require("../mongo/mongodb"),
+	formatDate 	= require('../formatdate');
 
 /* Готовит данные для сервера для прогноза на неделю */
 function getFullRow(data){

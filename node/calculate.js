@@ -4,8 +4,8 @@ var mongodb  = require("../mongo/mongodb"),
 function calc(callback, COLLECTION){
 	var dataA,
 		dataF,
-		funcA = function(data) {dataA = data; funcAF()},
-		funcF = function(data) {dataF = data; funcAF()},
+		funcA = function(err, data) {dataA = data; funcAF()},
+		funcF = function(err, data) {dataF = data; funcAF()},
 		funcAF = function() {
 			if(!dataA || !dataF) return;
 			var callbackWrapper = function(err, result) {
@@ -28,7 +28,7 @@ function calc(callback, COLLECTION){
 /* Считает отклонение за все время */
 function setMainDeviation(arr, COLLECTION){
 	var func = function(data){
-		if(!data.length){
+		if(!data || !data.length){
 			arr.forEach(function(val, key){
 				arr[key]['daykey'] = 'maindeviation';
 				arr[key]['timestamp'] = Date.now();
