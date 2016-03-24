@@ -238,12 +238,12 @@ console.info('data - ',data);
 				if (!temp[val.name]) {
 					temp[val.name] = [val.name];
 				}
-				temp[val.name][(val.afterday || 0) + 1] = val.value;
+				temp[val.name][(-val.afterday || 0) + 1] = val.value;
 			} else if (val.key.indexOf('text') !== -1) {
 				if (!text[val.name]) {
 					text[val.name] = [val.name];
 				}
-				text[val.name][(val.afterday || 0) + 1] = val.value;
+				text[val.name][(-val.afterday || 0) + 1] = val.value;
 			}
 		});
 		for (var key in temp) {
@@ -251,8 +251,8 @@ console.info('data - ',data);
 			resArr.push(text[key]);
 		}
 console.info('resArr - ',resArr);
-		resArr.forEach(function (vall, keyy) {
-			vall.forEach(function (valll, keyyy) {
+		resArr.forEach(function (vall, keyy) {          // вся таблица
+			vall.forEach(function (valll, keyyy) {      // строка таблицы
 				if (!resObj[keyy]) resObj[keyy] = {};
 				if (keyyy === 0) {
 					resObj[keyy]['name'] = valll;
