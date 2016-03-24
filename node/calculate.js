@@ -65,7 +65,8 @@ function setMainDeviation(arr, COLLECTION){
 function getDeviation(actual, forecast){
     var avgActual 	= prepareAverage(actual),
         avgForecast = prepareAverage(forecast);
-
+console.info('avgForecast - ',avgForecast);
+console.info('avgActual - ',avgActual);
     avgForecast.forEach(function(valF, keyF){
         avgActual.forEach(function(valA){
             if(String(valF['value']).indexOf('(') !== -1) return;
