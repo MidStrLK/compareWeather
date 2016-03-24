@@ -232,7 +232,7 @@ Ext.define('APP.buttonPanel' , {
 			resObj = [],
 			temp = {},
 			text = {};
-
+console.info('data - ',data);
 		data.forEach(function (val) {
 			if (val.key.indexOf('temp') !== -1) {
 				if (!temp[val.name]) {
@@ -250,7 +250,7 @@ Ext.define('APP.buttonPanel' , {
 			resArr.push(temp[key]);
 			resArr.push(text[key]);
 		}
-
+console.info('resArr - ',resArr);
 		resArr.forEach(function (vall, keyy) {
 			vall.forEach(function (valll, keyyy) {
 				if (!resObj[keyy]) resObj[keyy] = {};
@@ -261,7 +261,7 @@ Ext.define('APP.buttonPanel' , {
 				}
 			})
 		});
-
+console.info('resObj - ',resObj);
 		store.removeAll();
 		store.add(resObj);
 

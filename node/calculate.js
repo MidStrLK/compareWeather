@@ -29,6 +29,8 @@ function calc(callback, COLLECTION){
 function setMainDeviation(arr, COLLECTION){
     var func = function(data){
         if(!data || !data.length){
+            // Предыдущие значения
+            // Новые значения
             arr.forEach(function(val, key){
                 arr[key]['daykey'] = 'maindeviation';
                 arr[key]['timestamp'] = Date.now();
@@ -65,8 +67,7 @@ function setMainDeviation(arr, COLLECTION){
 function getDeviation(actual, forecast){
     var avgActual 	= prepareAverage(actual),
         avgForecast = prepareAverage(forecast);
-console.info('avgForecast - ',avgForecast);
-console.info('avgActual - ',avgActual);
+
     avgForecast.forEach(function(valF, keyF){
         avgActual.forEach(function(valA){
             if(String(valF['value']).indexOf('(') !== -1) return;
@@ -106,15 +107,30 @@ function prepareAverage(arr){
 	var resObj = {},
 		resArr = [];
 	arr.forEach(function(val){
+
+        /*   #VAL#
+        { _id: 56f3c2f901f1ce94220d48b1,
+            name: 'yandex',
+            key: 'temp',
+            value: -1,
+            daykey: 'destiny',
+            afterday: 0,
+            year: 2016,
+            month: 3,
+            day: 24,
+            hour: 13,
+            timestamp: 1458815737363
+        }*/
+
         var name = [];
         if(val.name) name.push(val.name);
         if(val.key)  name.push(val.key);
-        if(val.afterday)  name.push(String(val.afterday));
+        if(val.afterday !== undefined)  name.push(String(val.afterday));
 
         name = name.join('_');
 
 		if(!resObj[name]) resObj[name] = [];
-		resObj[name].push(val);
+		resObj[name].push(val);                 // Получаем наборы прогнозов с какой-то даты на сегодня
 	});
 
 	for(var key in resObj){
@@ -155,7 +171,7 @@ function getAverageValueTemp(arr){
 		result += arr[i].value;
 	}
 
-	arr[0].value = result / arrLen;
+	arr[0].value = (result / arrLen).toFixed(1);
 
 	return arr[0];
 }
