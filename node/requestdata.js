@@ -26,9 +26,9 @@ function getForecastDayDate(date) {
 	if(!date) date = new Date();
 	return {
 		daykey: 'destiny',
-		year: date.getFullYear(),
-		month: date.getMonth() + 1,
-		day: date.getDate()
+		year:   date.getFullYear(),
+		month:  date.getMonth() + 1,
+		day:    date.getDate()
 	}
 }
 
