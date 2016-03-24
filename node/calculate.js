@@ -108,7 +108,8 @@ function prepareAverage(arr){
 	arr.forEach(function(val){
         var name = [];
         if(val.name) name.push(val.name);
-        if(val.key) name.push(val.key);
+        if(val.key)  name.push(val.key);
+        if(val.afterday)  name.push(String(val.afterday));
 
         name = name.join('_');
 
