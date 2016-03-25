@@ -1,13 +1,68 @@
 /* Получить временные данные для актуальной даты на весь день*/
-function getActualDayDate(date){
+function getActualDay(date){
 	if(!date) date = new Date();
 	return {
-		daykey: 'now',
-		year: date.getFullYear(),
-		month: date.getMonth() + 1,
-		day: date.getDate()
+		daykey: 'actual',
+		year:   date.getFullYear(),
+		month:  date.getMonth() + 1,
+		day:    date.getDate()
 	}
 }
+
+/* Получить временные данные для прогноза С даты на весь день*/
+function getForecastDay(date){
+    if(!date) date = new Date();
+    return {
+        daykey: 'forecast',
+        year:   date.getFullYear(),
+        month:  date.getMonth() + 1,
+        day:    date.getDate()
+    }
+}
+
+/* Получить временные данные для актуальной даты на весь день*/
+function getPredictedDay(date){
+    if(!date) date = new Date();
+    return {
+        daykey: 'predicted',
+        year:   date.getFullYear(),
+        month:  date.getMonth() + 1,
+        day:    date.getDate()
+    }
+}
+
+
+/* Получить временные данные для актуальной усредненной даты на весь день*/
+function getActualAverageDay(date){
+    if(!date) date = new Date();
+    return {
+        daykey: 'actualaverage',
+        year:   date.getFullYear(),
+        month:  date.getMonth() + 1,
+        day:    date.getDate()
+    }
+}
+
+/* Получить временные данные для предсказанной усредненной НА даты на весь день*/
+function getPredictedAverageDay(date){
+    if(!date) date = new Date();
+    return {
+        daykey: 'predictedaverage',
+        year:   date.getFullYear(),
+        month:  date.getMonth() + 1,
+        day:    date.getDate()
+    }
+}
+
+/* Получить временные данные для главного отклонения */
+function getDeviation() {
+    return {
+        daykey: 'deviation'
+    }
+}
+
+
+
 
 /* Получить временные данные для актуальной даты */
 function getActualDate(date){
@@ -62,7 +117,15 @@ function getMainDeviationData() {
 	}
 }
 
-exports.getActualDayDate 		= getActualDayDate;
+exports.getActualDay 		    = getActualDay;
+exports.getForecastDay 		    = getForecastDay;
+exports.getPredictedDay         = getPredictedDay;
+exports.getActualAverageDay     = getActualAverageDay;
+exports.getPredictedAverageDay  = getPredictedAverageDay;
+exports.getDeviation            = getDeviation;
+
+
+
 exports.getActualDate 			= getActualDate;
 exports.getForecastDayDate 		= getForecastDayDate;
 exports.getForecastDate 		= getForecastDate;

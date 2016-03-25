@@ -8,47 +8,90 @@ var manifest 	= require("../manifest"),
 /* передача на сервер функции */
 exports.getAllWeather = getAllWeather;
 
+
+
+
 /* Запрашивает погоду из всех источников */
 function getAllWeather(callback, COLLECTION){
-    if(manifest && manifest.list){
-        for(var key in manifest.list){
-            getWeather(manifest.list[key], COLLECTION)
-        }
+    if(!manifest || !manifest.list) return;
+
+    var requestArray = [];
+
+    for(var key in manifest.list) {
+        //getWeather(manifest.list[key], COLLECTION)
+        requestArray = requestArray.concat(getRequestData(manifest.list[key]));
     }
-}
 
-/* Запрос на сервер и формирование объекта */
-function getWeather(data, COLLECTION) {
-    var params = data.params,
-        name = data.name,
-        periodic = data.periodic;
+    var responseArray = [],
+        length = 0,
+        responseArrayLength = 0,
+        func = function(data){
+            responseArray = responseArray.concat(data);
+            responseArrayLength++;
 
-    var submitRequest = function(localURL, subParams, inc){
-        request({
-            uri: localURL
-        }, function(error, response, body) {
-            var $ = cheerio.load(body);
+            if(responseArrayLength !== length) return;
 
-            for(var key in subParams){
-                findParameter($, subParams[key], key, name, inc, periodic, COLLECTION)
-            }
-        });
+            sendData(responseArray, callback, COLLECTION);
+            //callback(0, responseArray);
     };
 
+    requestArray.forEach(function(val){
+        for(var key in val.params){
+            length++;
+        }
+    });
+
+    requestArray.forEach(function(val){
+        submitRequest(val, func);
+    });
+}
+
+/* Получаем данные для отправки запроса */
+function getRequestData(data){
+    var params = data.params,
+        name = data.name,
+        periodic = data.periodic,
+        res = [];
+
     if(data.url){
-        submitRequest(data.url, params,  data.firstNumber);
+        res.push({
+            url:data.url,
+            params: params,
+            inc: data.firstNumber,
+            name: name,
+            periodic: periodic
+        });
     }else if(params['forEach']){
         params['forEach'](function(Pval){
-            submitRequest(Pval.url, Pval.params, Pval.firstNumber);
+            res.push({
+                url:Pval.url,
+                params: Pval.params,
+                firstNumber: Pval.firstNumber,
+                name: name,
+                periodic: periodic
+            });
         })
     }
 
+    return res;
+}
 
 
+/* Запрос данных с сайта */
+function submitRequest(values, callback){
+    request({
+        uri: values.url
+    }, function(error, response, body) {
+        var $ = cheerio.load(body);
+
+        for(var key in values.params){
+            findParameter($, values.params[key], key, values.name, values.inc, values.periodic, callback)
+        }
+    });
 }
 
 /* Ищет параметры для каждого случая */
-function findParameter($, tag, key, name, firstNumber, periodic, COLLECTION){
+function findParameter($, tag, key, name, firstNumber, periodic, callback){
     var intArr = [],
         resArr = [],
         daynum = firstNumber || 0;
@@ -68,14 +111,14 @@ function findParameter($, tag, key, name, firstNumber, periodic, COLLECTION){
 
         if(periodic && periodic === 'odd' && (key.indexOf('day') !== -1) && num%2 === 0) return;
 
-        resArr.push(getFullRow({
+        resArr.push(createActualForecastRow({
             name: name,
             key: key,
             afterday: daynum,
             value: val
         }));
 
-        resArr.push(getFullRowDay({
+        resArr.push(createForecastPredictedRow({
             name: name,
             key: key,
             afterday: daynum,
@@ -86,21 +129,12 @@ function findParameter($, tag, key, name, firstNumber, periodic, COLLECTION){
 
     });
 
-    sendData(resArr, COLLECTION);
 
+    callback(resArr);
 }
-
-
-/* Отправляет данные на сервер */
-function sendData(data, COLLECTION){
-    //console.info('COLLECTION - ',COLLECTION);
-    console.info(formatDate.dateToLocal(), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
-    mongodb.requestMDB('insert', null, data, COLLECTION);
-}
-
 
 /* Готовит данные для сервера для прогноза на неделю */
-function getFullRow(data){
+function createActualForecastRow(data){
 
 		var date 	 = new Date(),
 			name 	 = data.name,
@@ -113,7 +147,8 @@ function getFullRow(data){
 	if(key 		!== undefined) 	{
 		if(key.indexOf('_') !== -1){
 			res.key 	= key.split('_')[1];					// Ключ в манифесте (temp, text)
-			res.daykey 	= key.split('_')[0];					// now/day
+			//res.daykey 	= key.split('_')[0];					// now/day -> actual/forecast
+            res.daykey = (key.split('_')[0] === 'now') ? 'actual' : 'forecast';
 		}
 
 	}
@@ -132,7 +167,7 @@ function getFullRow(data){
 }
 
 /* Готовит данные для сервера для прогноза на определенный день*/
-function getFullRowDay(data){
+function createForecastPredictedRow(data){
 
 		var date 	 = new Date(),
 			tempDate = new Date(),
@@ -145,7 +180,7 @@ function getFullRowDay(data){
 	if(name 	!== undefined) 	res.name 		= name;			// Название сервиса (yandex, gismeteo)
 	if(key 		!== undefined && key.indexOf('_') !== -1) res.key = key.split('_')[1];
 	if(value 	!== undefined) 	res.value 	 	= value;		// Значение (10, облачно)
-	res.daykey 	= 'destiny';
+	res.daykey 	= 'predicted';
 
 
 	if(afterday !== undefined) 	res.afterday = -afterday;		// На сколько дней прогноз (0,1,2....)
@@ -161,3 +196,44 @@ function getFullRowDay(data){
 
 	return res;
 }
+
+
+
+/* Отправляет данные на сервер */
+function sendData(data, callback, COLLECTION){
+    console.info(formatDate.dateToLocal(), '-NODE_request- weather - result: ', (data && data.length) ? data.length : 'error');
+    mongodb.requestMDB('insert', callback, data, COLLECTION);
+}
+
+
+
+
+
+
+/* Запрос на сервер и формирование объекта */
+/*function getWeather(data, collectData, COLLECTION) {
+ var params = data.params,
+ name = data.name,
+ periodic = data.periodic;
+
+ var submitRequest = function(localURL, subParams, inc){
+ request({
+ uri: localURL
+ }, function(error, response, body) {
+ var $ = cheerio.load(body);
+
+ for(var key in subParams){
+ findParameter($, subParams[key], key, name, inc, periodic, collectData, COLLECTION)
+ }
+ });
+ };
+
+ if(data.url){
+ submitRequest(data.url, params,  data.firstNumber);
+ }else if(params['forEach']){
+ params['forEach'](function(Pval){
+ this.length++;
+ submitRequest(Pval.url, Pval.params, Pval.firstNumber);
+ })
+ }
+ }*/

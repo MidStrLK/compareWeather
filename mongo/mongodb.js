@@ -55,10 +55,10 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
     }else if(path === 'select'){
         selectDB(data, callback, COLLECTION)
 
-    }else if(path === 'selectDayActual'){
+    }/*else if(path === 'selectDayActual'){
         selectDB(requestdata.getActualDayDate(), callback, COLLECTION)
 
-    }else if(path === 'selectDayForecast'){
+    }*/else if(path === 'selectDayForecast'){
         selectDB(requestdata.getForecastDayDate(), callback, COLLECTION)
 
     }else if(path === 'getMainDeviation'){
@@ -67,9 +67,14 @@ console.log(formatDate.dateToLocal(), '-MDB_request-', path);
     }else if(path === 'mongorequest'){
         selectDB(data, callback, COLLECTION)
 
-    }else if(path === 'insertMainDeviation'){
-        removeDB(requestdata.getMainDeviationData(),function(err, result){
-            if(!err) insertDB(data, callback, COLLECTION);
+    }else if(path === 'insertDeviation'){
+        removeDB(requestdata.getDeviation(),function(err, result){
+            if(!err){
+                insertDB(data, callback, COLLECTION)
+            }else{
+                console.info('err - ',err);
+            }
+
         }, COLLECTION);
     }
 }
