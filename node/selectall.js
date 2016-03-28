@@ -44,7 +44,8 @@ function calcDeviationForecast(forecast, deviation){
 function addDegree(data){
     data.forEach(function(val, key){
         if(val.key === 'temp'){
-              data[key]['text'] = '<span class="span-temp">' + data[key]['value'] + '</span><span class="span-degree"> &deg;C</span>';
+              data[key]['text'] = '<span class="span-temp">' + data[key]['value'] + '&deg;</span>';
+              //data[key]['text'] = '<span class="span-temp">' + data[key]['value'] + '</span><span class="span-degree"> &deg;C</span>';
         }else data[key]['text'] = '<span class="span-text">' + data[key]['value'] + '</span>';
     });
 
