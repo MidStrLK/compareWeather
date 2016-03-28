@@ -267,7 +267,14 @@ console.info('resObj - ',resObj);
 
 	},
 
-	setForecastWeather: function (data) {
+    setForecastWeather: function (data) {
+        var store = this.getForecastGrid().getStore();
+
+        store.removeAll();
+        store.add(data);
+    },
+
+	/*setForecastWeather: function (data) {
 		var me = this,
 			store = me.getForecastGrid().getStore(),
 			resArr = [],
@@ -307,7 +314,7 @@ console.info('resObj - ',resObj);
 		store.removeAll();
 		store.add(resObj);
 
-	},
+	},*/
 
 
 

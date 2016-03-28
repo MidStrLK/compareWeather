@@ -1,0 +1,18 @@
+.span-temp{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.span-degree{
+    font-size: 1.3em;
+    font-style: italic;
+}
+
+.span-text{
+    font-style: italic;
+    font-weight: bold;
+}
+
+.span-deviation{
+    font-size: 0.8em;
+}

@@ -62,19 +62,23 @@ function getDeviation() {
 }
 
 
-
-
 /* Получить временные данные для актуальной даты */
-function getActualDate(date){
+function getActualHour(date){
 	if(!date) date = new Date();
 	return {
-		daykey: 'now',
+		daykey: 'actual',
 		year: date.getFullYear(),
 		month: date.getMonth() + 1,
 		day: date.getDate(),
 		hour: date.getHours()
 	}
 }
+
+
+
+
+
+
 
 /* Получить временные данные для прогноза за весь день */
 function getForecastDayDate(date) {
@@ -123,10 +127,10 @@ exports.getPredictedDay         = getPredictedDay;
 exports.getActualAverageDay     = getActualAverageDay;
 exports.getPredictedAverageDay  = getPredictedAverageDay;
 exports.getDeviation            = getDeviation;
+exports.getActualHour           = getActualHour;
 
 
 
-exports.getActualDate 			= getActualDate;
 exports.getForecastDayDate 		= getForecastDayDate;
 exports.getForecastDate 		= getForecastDate;
 exports.getDestinyDate 			= getDestinyDate;

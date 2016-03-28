@@ -54,11 +54,11 @@ Ext.define('APP.Desktop' , {
 		cmargins: '5 5 5 5',
 		//height: 300,
 		autoHeight: true
-	}, {
+	}/*, {
 		xtype: 'todayForecastGrid',
 		cmargins: '5 5 5 5',
 		autoHeight: true
-	}],
+	}*/],
 
 	testPass: function(field){
 		var password = this.MD5(field.getValue());
