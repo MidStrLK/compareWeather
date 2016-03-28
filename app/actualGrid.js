@@ -10,7 +10,7 @@ Ext.define('APP.actualGrid' , {
 		},
 	columns: [
 		{ dataIndex: 'name', width: 150, menuDisabled: true },
-		{ dataIndex: 'temp', width: 50, menuDisabled: true},
-		{ dataIndex: 'text', flex: 1, menuDisabled: true}
+		{ dataIndex: 'temp', width:  60, menuDisabled: true },
+		{ dataIndex: 'text', flex:    1, menuDisabled: true }
 	]
 });

@@ -32,7 +32,7 @@ Ext.define('APP.buttonPanel' , {
                 }
             }
         }
-	},{
+	}/*,{
 		xtype: 'button',
 		name: 'testInterval',
 		text: 'Запустить таймер',
@@ -81,7 +81,7 @@ Ext.define('APP.buttonPanel' , {
 
 
 		}
-	},{
+	}*/,{
 		xtype: 'button',
 		name: 'testCalcDB',
 		text: 'Тест расчета БД',
