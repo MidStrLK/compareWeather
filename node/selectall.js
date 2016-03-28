@@ -7,27 +7,47 @@ function select(postData, callback, COLLECTION){
 	if(postData) postData = JSON.parse(postData);
 	var aData, fData, dData,
 		date = (postData && postData.date) ? new Date(postData.date) : new Date(),
-		funcA = function(err, dataA){aData = dataA;funcAFT();},
-		funcF = function(err, dataF){fData = dataF;funcAFT();},
-		funcD = function(err, dataD){dData = dataD;funcAFT();},
-		funcAFT = function(){
+		funcA = function(err, dataA){aData = dataA;funcAFD();},
+		funcF = function(err, dataF){fData = dataF;funcAFD();},
+		funcD = function(err, dataD){dData = dataD;funcAFD();},
+		funcAFD = function(){
 			if(!aData || !fData || !dData) return;
 
+            if(aData.length){
+                createReturnData(aData, fData, dData, callback);
+            }else{
+                var lastHour = new Date(),
+                    func = function(err, data){
+                        createReturnData(data, fData, dData, callback);
+                    };
+                lastHour = new Date(lastHour.setHours((new Date()).getHours() - 1));
+                mongodb.requestMDB('select', func, requestdata.getActualHour(lastHour), 	COLLECTION);
+            }
 
-            var forecastDeviation = calcDeviationForecast(fData, dData);
 
-			var res = {
-				actual:     aData,
-				forecast:   forecastDeviation
-			};
-
-			callback(0, res);
+            //var forecastDeviation = calcDeviationForecast(fData, dData);
+			//var res = {
+			//	actual:     aData,
+			//	forecast:   forecastDeviation
+			//};
+			//callback(0, res);
 
 		};
 
 	mongodb.requestMDB('select', funcA, requestdata.getActualHour(date), 	COLLECTION);
 	mongodb.requestMDB('select', funcF, requestdata.getForecastDay(date), 	COLLECTION);
 	mongodb.requestMDB('select', funcD, requestdata.getDeviation(),         COLLECTION);
+}
+
+function createReturnData(actual, forecast, deviation, callback){
+    var forecastDeviation = calcDeviationForecast(forecast, deviation);
+
+    var res = {
+        actual:     actual,
+        forecast:   forecastDeviation
+    };
+
+    callback(0, res);
 }
 
 function calcDeviationForecast(forecast, deviation){
