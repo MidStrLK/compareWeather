@@ -55,9 +55,9 @@ function addDegree(data){
 function addDeviation(forecast, deviation){
     forecast.forEach(function(valF, keyF){                 // Прогноз с данного часа на несколько дней вперед
         deviation.forEach(function(valD){                   // Насколько точен прогноз на несколько дней
-            if( valD['name'] 	 === valF['name'] &&
-                valD['key']  	 === valF['key']  &&
-                valD['afterday'] === valF['afterday']){
+            if(  valD['name'] 	  === valF['name'] &&
+                 valD['key']  	  === valF['key']  &&
+                -valD['afterday'] === +valF['afterday']){
                 forecast[keyF]['text'] = valF['text'] +
                     '<span class="span-deviation">(' +
                     ((valD['key'] === 'temp') ? ('±' + valD['value'].toFixed(1)) :  (valD['value']*100).toFixed(1) + '%') +
