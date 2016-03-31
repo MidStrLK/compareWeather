@@ -115,6 +115,7 @@ function getAverageValueText(arr) {
 
 /* Посчитать среднее значение массива Температур */
 function getAverageValueTemp(arr){
+    console.info('arr - ',arr);
     var arrLen = arr.length,
         result = 0;
     for (var i = 0; i < arrLen; i++) {
@@ -197,7 +198,6 @@ function calcDeviation(predicted, actual, key){
 
 
 function getDeviation(actual, deviation){
-
     var newDeviation = [];
 
     actual.forEach(function(valA){
@@ -206,8 +206,8 @@ function getDeviation(actual, deviation){
             if( valA.name     === valD.name &&
                 valA.key      === valD.key &&
                 valA.afterday === valD.afterday){
+                    valD.value = (valD.value * valD.count + valA.value)/(valD.count + 1);
                     valD.count++;
-                    valD.value = (valD.value + valA.value)/valD.count;
                 actualIsNew = false;
             }
         });
