@@ -42,6 +42,8 @@ function select(postData, callback, COLLECTION){
 function createReturnData(actual, forecast, deviation, callback){
     var forecastDeviation = calcDeviationForecast(forecast, deviation);
 
+
+
     var res = {
         actual:     actual,
         forecast:   forecastDeviation

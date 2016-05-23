@@ -16,3 +16,28 @@
 .span-deviation{
     font-size: 0.8em;
 }
+
+.hourly_temp{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.hourly_text{
+    font-style: italic;
+    font-weight: bold;
+}
+
+.hourlyGrid td>div{
+    text-align: center;
+}
+
+.actual_temp{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.actual_text{
+    font-style: italic;
+    font-size: 1.5em;
+    font-weight: bold;
+}

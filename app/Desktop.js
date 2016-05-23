@@ -2,7 +2,8 @@ Ext.require([
 	'APP.actualGrid',
 	'APP.forecastGrid',
 	'APP.buttonPanel',
-	'APP.todayForecastGrid'
+	'APP.todayForecastGrid',
+	'APP.hourlyGrid'
 ]);
 
 Ext.define('APP.Desktop' , {
@@ -50,6 +51,11 @@ Ext.define('APP.Desktop' , {
 			}]
 		}]
 	}, {
+		xtype: 'hourlyGrid',
+		cmargins: '5 5 5 5',
+		//height: 300,
+		autoHeight: true
+	}, {
 		xtype: 'forecastGrid',
 		cmargins: '5 5 5 5',
 		//height: 300,
@@ -63,7 +69,6 @@ Ext.define('APP.Desktop' , {
 	testPass: function(field){
 		var password = this.MD5(field.getValue());
 		field.setValue('');
-		console.info('password - ',password);
 		//if(password === '42cfbd491c0a8bda8773458dc07b2119'){
 		if(password === '5cfdb867e96374c7883b31d6928cc4cb'){
 			this.down('[name="passfield"]').hide();

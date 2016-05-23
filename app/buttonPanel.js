@@ -165,10 +165,51 @@ Ext.define('APP.buttonPanel' , {
 				}
 			})
 		}
-	}],
+	},{
+        xtype: 'button',
+        name: 'getHourly',
+        text: 'Почасовой',
+        handler: function () {
+            var me = this.up('desktop');
+            Ext.Ajax.request({
+                url: '/gethourly',
+                method: 'GET',
+                callback: function (opts, success, response) {
+                    if(success){
+                        var data = JSON.parse(response.responseText),
+                            grid = me.down('hourlyGrid'),
+                            store = grid.getStore();
+
+                        store.removeAll();
+
+                        data.forEach(function(val){
+                            store.add(val)
+                        })
+                    }
+                }
+            })
+        }
+    }],
 
 	getWeather: function(){
 		var me = this;
+
+        Ext.Ajax.request({
+            url: '/gethourly',
+            method: 'GET',
+            callback: function (opts, success, response) {
+                if(success){
+                    var data = JSON.parse(response.responseText),
+                        grid = me.up('desktop').down('hourlyGrid'),
+                        store = grid.getStore();
+
+                    data.forEach(function(val){
+                        store.add(val)
+                    })
+                }
+            }
+        })
+
 		Ext.Ajax.request({
 			url: '/select',
 			method: 'GET',
@@ -215,8 +256,8 @@ Ext.define('APP.buttonPanel' , {
 			res.forEach(function(val2){
 				if(val1['name'] === val2['name'] && val1['key'] === 'temp' && val2['key'] === 'text') arr.push({
 					name: val1['name'],
-					temp: val1['value'] + ' &deg;C',
-					text: val2['value']
+					temp: '<span class="actual_temp">' + val1['value'] + ' &deg;C</span>',
+					text: '<span class="actual_text">' + val2['value'] + '</span>'
 				})
 			});
 		});

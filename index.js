@@ -10,5 +10,6 @@ handle["/select"]           = requestHandlers.submitRequest;    // Получи�
 handle["/count"]            = requestHandlers.submitRequest;    // Тест БД
 handle["/testCalculate"]    = requestHandlers.submitRequest;    // Тест БД
 handle["/mongorequest"]     = requestHandlers.submitRequest;    // Тест БД
+handle["/gethourly"]        = requestHandlers.submitRequest;    // Почасовой прогноз
 
 server.start(router.route, handle);

@@ -6,12 +6,14 @@ Ext.define('APP.todayForecastGrid' , {
 
 	days: 14,
 
+    enableLocking:true,
+
 	initComponent: function(){
 
 		if(!this.days) this.days = 10;
 
 		var fields = ['name'],
-			columns = [{ text: 'Название', dataIndex: 'name', menuDisabled: true }],
+			columns = [{ text: 'Название', dataIndex: 'name', menuDisabled: true,  locked: true }],
 			date = new Date(),
 			formatDate = function(increment){
 				var incDate = new Date(),

@@ -3,7 +3,8 @@ var mongodb     = require("../mongo/mongodb"),
     index       = fs.readFileSync('./index.html'),
     weather     = require("./weather"),
     calculate   = require("./calculate"),
-    selectall   = require("./selectall");
+    selectall   = require("./selectall"),
+    hourly      = require("./hourly");
 
 function submitRequest(response, handle, pathname, postData, COLLECTION){
 
@@ -43,6 +44,8 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
       }else if (pathname === '/mongorequest') {
           console.info('postData - ',postData);
           mongodb.requestMDB(path, func, JSON.parse(postData), COLLECTION);
+      }else if (pathname === '/gethourly') {
+          hourly.getHourly(func);
       } else if (mongodb.requestMDB) {
           mongodb.requestMDB(path, func, null, COLLECTION);
       } else {
