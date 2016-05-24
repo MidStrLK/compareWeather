@@ -206,9 +206,17 @@ Ext.define('APP.buttonPanel' , {
                     data.forEach(function(val){
                         store.add(val)
                     })
+
+                    var hour = (new Date()).getHours(),
+                        column = grid.columns[hour],
+                        position = column.getPosition(),
+                        posX = position[0];
+
+                    grid.scrollByDeltaX(posX)
+
                 }
             }
-        })
+        });
 
 		Ext.Ajax.request({
 			url: '/select',
