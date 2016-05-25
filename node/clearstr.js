@@ -11,4 +11,20 @@ function clearTemp(text){
     return text;
 }
 
+function translate(text){
+    if(text && text.toLowerCase && translateArray[text.toLowerCase()]) text = translateArray[text.toLowerCase()];
+    return text;
+}
+
+translateArray = {
+    'partly sunny'  : 'Местами солнечно',
+    'showers'       : 'Ливни',
+    'mostly clear'  : 'Малооблачно',
+    'cloudy'        : 'Облачно',
+    'rain'          : 'Дожди',
+    'mostly cloudy' : 'Пасмурно',
+    'partly cloudy' : 'Облачно с прояснениями'
+};
+
 exports.clearTemp = clearTemp;
+exports.translate = translate;

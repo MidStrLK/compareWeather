@@ -25,7 +25,7 @@
         </tr>
         <tr ng-repeat="val in hourly" class="hourly_tr">
             <th class="hourly_name">{{val.name}}</th>
-            <td ng-repeat="vall in val" class="hourly_td">
+            <td ng-repeat="vall in val" class="hourly_td {{vall.style}}">
                 <span class="hourly_temp">{{vall.temp}}</span>
                 <br>
                 <span class="hourly_text">{{vall.text}}</span>

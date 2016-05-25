@@ -5,14 +5,27 @@ myApp.controller('RequestController',
             $scope.actual = data;
         });
 
+
+
+        var nowHour = (new Date()).getHours(),
+            newHourly = {};
+        $http.get('/gethourly').success(function(data) {
+            data.forEach(function(val, key){
+                if(!newHourly[key]) newHourly[key] = {};
+                for(var Okey in val){
+                    if(parseInt(Okey) >= nowHour || Okey === 'name') newHourly[key][Okey] = val[Okey];
+
+                    //if(!val[Okey]) val[Okey] = {};
+                    //val[Okey].style = (parseInt(Okey) < nowHour) ? 'hourly_past' : 'hourly_actual';
+                }
+            });
+            $scope.hourly = newHourly;
+        });
+
         $scope.hourlyTime = [' '];
-        for(var i=0;i<24;i++){
+        for(var i=nowHour;i<24;i++){
             $scope.hourlyTime.push(i+':00');
         }
-
-        $http.get('/gethourly').success(function(data) {
-            $scope.hourly = data;
-        });
 
         $scope.forecastDate = [' '];
 

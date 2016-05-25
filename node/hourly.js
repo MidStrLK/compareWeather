@@ -107,7 +107,7 @@ function findParameter($, values, callback){
             var link = $(this);
             var text = link.text();
             if(!result[key]) result[key] = {};
-            result[key]['text'] = text;
+            result[key]['text'] = clearstr.translate(text);
         });
     }
 
