@@ -1,22 +1,62 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html ng-app='myApp'>
 <head>
-    <link rel="shortcut icon" href="favicon.png" type="image/png">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	
+    <meta charset="utf-8">
     <title>Сравнение Погод</title>
-
-    <link rel="stylesheet" type="text/css" href="/ext/classic/theme-neptune/resources/theme-neptune-all.css">
-    <script type="text/javascript" src="/ext/ext-all-debug.js"></script>
-
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" type="text/css" href="styles.css">
-
-    <script type="text/javascript" src="app/app.js"></script>
-
 </head>
-
-
 <body>
+
+<div  ng-controller="RequestController">
+    <table class="actual_table">
+        <tr ng-repeat="val in actual" class="actual_tr">
+            <th class="actual_name">{{val.name}}</th>
+            <td class="actual_temp">{{val.temp}}</td>
+            <td class="actual_text">{{val.text}}</td>
+        </tr>
+    </table>
+
+    <table class="hourly_table">
+        <tr class="hourly_time_tr">
+            <td ng-repeat="val in hourlyTime" class="hourly_time">
+                {{val}}
+            </td>
+        </tr>
+        <tr ng-repeat="val in hourly" class="hourly_tr">
+            <th class="hourly_name">{{val.name}}</th>
+            <td ng-repeat="vall in val" class="hourly_td">
+                <span class="hourly_temp">{{vall.temp}}</span>
+                <br>
+                <span class="hourly_text">{{vall.text}}</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="forecast_table">
+        <tr class="forecast_time_tr">
+            <td ng-repeat="val in forecastDate" class="forecast_time">
+                {{val}}
+            </td>
+        </tr>
+        <tr ng-repeat="val in forecast" class="forecast_tr">
+            <th class="forecast_name">{{val.name}}</th>
+            <td ng-repeat="vall in val" class="forecast_td">
+                <span class="forecast_temp">{{vall.temp}}</span>
+                <span class="forecast_temp_deviation">{{vall.temp_deviation}}</span>
+                <br>
+                <span class="forecast_text">{{vall.text}}</span>
+                <span class="forecast_text_deviation">{{vall.text_deviation}}</span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script src="/ext/angular.js"></script>
+<script type="text/javascript">
+    var myApp = angular.module('myApp', []);
+</script>
+<script src="js/controllers/RequestController.js"></script>
+
 </body>
 </html>

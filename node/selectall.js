@@ -1,5 +1,6 @@
 var mongodb  = require("../mongo/mongodb"),
-	requestdata = require('./requestdata');
+	requestdata = require('./requestdata'),
+    clearstr    = require('./clearstr');
 
 exports.select = select;
 
@@ -66,9 +67,9 @@ function calcDeviationForecast(forecast, deviation){
 function addDegree(data){
     data.forEach(function(val, key){
         if(val.key === 'temp'){
-              data[key]['text'] = '<span class="span-temp">' + data[key]['value'] + '&deg;</span>';
-              //data[key]['text'] = '<span class="span-temp">' + data[key]['value'] + '</span><span class="span-degree"> &deg;C</span>';
-        }else data[key]['text'] = '<span class="span-text">' + data[key]['value'] + '</span>';
+              data[key]['value'] = clearstr.clearTemp(data[key]['value']);
+              //data[key]['text'] = data[key]['value'] + '&deg;';
+        }
     });
 
     return data;
@@ -81,10 +82,7 @@ function addDeviation(forecast, deviation){
             if(  valD['name'] 	  === valF['name'] &&
                  valD['key']  	  === valF['key']  &&
                 -valD['afterday'] === +valF['afterday']){
-                forecast[keyF]['text'] = valF['text'] +
-                    '<span class="span-deviation">(' +
-                    ((valD['key'] === 'temp') ? ('±' + valD['value'].toFixed(1)) :  (valD['value']*100).toFixed(1) + '%') +
-                    ')</span>';
+                forecast[keyF]['deviation'] = '(' +  ((valD['key'] === 'temp') ? ('±' + valD['value'].toFixed(1)) :  (valD['value']*100).toFixed(1) + '%') + ')';
             }
         })
     });
@@ -101,24 +99,15 @@ function sortToGrid(forecast){
     var rowView = {},
         res = [];
     forecast.forEach(function(val){
-        if(!rowView[val.name]) rowView[val.name] = [];
-        if(!rowView[val.name][val.afterday]) rowView[val.name][val.afterday] = [];
+        if(val.afterday > 10) return;
+        if(!rowView[val.name]) rowView[val.name] = {name: val.name};
+        if(!rowView[val.name][val.afterday]) rowView[val.name][val.afterday] = {};
 
-        if(val.key === 'temp'){
-              rowView[val.name][val.afterday][0] = val.text
-        }else rowView[val.name][val.afterday][1] = val.text
+        rowView[val.name][val.afterday][val.key] = val.value;
+        rowView[val.name][val.afterday][val.key + '_deviation'] = val.deviation;
     });
 
-    // Совмещаем temp и text
-    for(var key in rowView){                            // перебор источников
-        var row = {name: key};
-        rowView[key].forEach(function(valS, keyS){      // перебор значений
-            row['day' + keyS] = rowView[key][keyS].join(', ');
-        });
-        res.push(row);
-    }
-
-    return res;
+    return rowView;
 }
 
 

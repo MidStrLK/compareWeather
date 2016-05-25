@@ -4,7 +4,8 @@ var mongodb     = require("../mongo/mongodb"),
     weather     = require("./weather"),
     calculate   = require("./calculate"),
     selectall   = require("./selectall"),
-    hourly      = require("./hourly");
+    hourly      = require("./hourly"),
+    actual      = require("./actual");
 
 function submitRequest(response, handle, pathname, postData, COLLECTION){
 
@@ -46,6 +47,8 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
           mongodb.requestMDB(path, func, JSON.parse(postData), COLLECTION);
       }else if (pathname === '/gethourly') {
           hourly.getHourly(func);
+      }else if (pathname === '/getactual') {
+          actual.getActual(func);
       } else if (mongodb.requestMDB) {
           mongodb.requestMDB(path, func, null, COLLECTION);
       } else {

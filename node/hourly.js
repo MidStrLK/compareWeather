@@ -1,7 +1,8 @@
 var manifest 	= require("../manifest"),
 	request  	= require("request"),
 	cheerio  	= require("cheerio"),
-	utf8     	= require('utf8');
+	utf8     	= require('utf8'),
+    clearstr    = require('./clearstr');
 
 /* передача на сервер функции */
 exports.getHourly = getHourly;
@@ -59,6 +60,13 @@ function getEndResult(responseArray){
         if(!flag) res.push(val);
     });
 
+    res.forEach(function(val, key){
+        for(var i=0;i<24;i++){
+            if(!val[i]) res[key][i] = '';
+        }
+    });
+
+
     return res;
 }
 
@@ -90,7 +98,7 @@ function findParameter($, values, callback){
             var link = $(this);
             var text = link.text();
             if(!result[key]) result[key] = {};
-            result[key]['temp'] = text;
+            result[key]['temp'] = clearstr.clearTemp(text);
         });
     }
 
@@ -133,7 +141,7 @@ function findParameter($, values, callback){
             text: result[key].text || ''
         };
 
-        res[time] = '<span class="hourly_temp">' + (result[key].temp || '') + '</span></br><span class="hourly_text">' + (result[key].text || '') + '</span>';
+        //res[time] = '<span class="hourly_temp">' + (result[key].temp || '') + '</span></br><span class="hourly_text">' + (result[key].text || '') + '</span>';
 
     }
 

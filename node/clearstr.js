@@ -1,0 +1,14 @@
+function clearTemp(text){
+    text = String(text);
+    if(!text || !text.replace || !text.charAt) return;
+
+    text = text.replace(/\s/, '');
+    if(text.charAt(0) !== '-' && text.charAt(0) !== '+') text = '+' + text;
+    if(text.charAt(text.length-1) === 'C' && text.charAt(text.length-2) !== '°') text = text.substr(0, text.length-2) + '°C';
+    if(text.charAt(text.length-1) === '°') text += 'C';
+    if(text.indexOf('°C') === -1) text += '°C';
+
+    return text;
+}
+
+exports.clearTemp = clearTemp;

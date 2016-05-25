@@ -6,6 +6,7 @@ exports.list = [
 		params: {
 			 now_text: '.current-weather__comment'
 			,now_temp: '.current-weather__thermometer.current-weather__thermometer_type_now'
+			,now_img:  '.current-weather__col_type_now'
 			,day_text: '.forecast-brief__item-comment'
 			,day_temp: '.forecast-brief__item-temp-day'
 			//,day_temp_night: '.forecast-brief__item-temp-night'

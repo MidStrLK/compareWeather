@@ -1,43 +1,87 @@
-.span-temp{
-    font-size: 1.5em;
-    font-weight: bold;
-}
+@import "http://fonts.googleapis.com/css?family=Montserrat:300,400,700";
+.hourly_table {
+  width: 100%; }
 
-.span-degree{
-    font-size: 1.3em;
-    font-style: italic;
-}
+.forecast_table {
+  width: 100%; }
 
-.span-text{
-    font-style: italic;
-    font-weight: bold;
-}
+.actual_table, .hourly_table, .forecast_table {
+  margin: 1em 0;
+  min-width: 300px; }
+  .actual_table tr, .hourly_table tr, .forecast_table tr {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; }
+  .actual_table th, .hourly_table th, .forecast_table th {
+    display: none; }
+  .actual_table td, .hourly_table td, .forecast_table td {
+    display: block; }
+    .actual_table td:first-child, .hourly_table td:first-child, .forecast_table td:first-child {
+      padding-top: .5em; }
+    .actual_table td:last-child, .hourly_table td:last-child, .forecast_table td:last-child {
+      padding-bottom: .5em; }
+    .actual_table td:before, .hourly_table td:before, .forecast_table td:before {
+      content: attr(data-th) ": ";
+      font-weight: bold;
+      display: inline-block; }
+      @media (min-width: 480px) {
+        .actual_table td:before, .hourly_table td:before, .forecast_table td:before {
+          display: none; } }
+  .actual_table th, .actual_table td, .hourly_table th, .hourly_table td, .forecast_table th, .forecast_table td {
+    text-align: left; }
+    @media (min-width: 480px) {
+      .actual_table th, .actual_table td, .hourly_table th, .hourly_table td, .forecast_table th, .forecast_table td {
+        display: table-cell;
+        padding: .25em .5em; }
+        .actual_table th:first-child, .actual_table td:first-child, .hourly_table th:first-child, .hourly_table td:first-child, .forecast_table th:first-child, .forecast_table td:first-child {
+          padding-left: 0; }
+        .actual_table th:last-child, .actual_table td:last-child, .hourly_table th:last-child, .hourly_table td:last-child, .forecast_table th:last-child, .forecast_table td:last-child {
+          padding-right: 0; } }
 
-.span-deviation{
-    font-size: 0.8em;
-}
+body {
+  padding: 0 2em;
+  font-family: Montserrat, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color: #444;
+  background: #1D1F20; }
 
-.hourly_temp{
-    font-size: 1.5em;
-    font-weight: bold;
-}
+h1 {
+  font-weight: normal;
+  letter-spacing: -1px;
+  color: #34495E; }
 
-.hourly_text{
-    font-style: italic;
-    font-weight: bold;
-}
+.actual_table, .hourly_table, .forecast_table {
+  background: #34495E;
+  color: #fff;
+  border-radius: .4em;
+  overflow: hidden; }
+  .actual_table tr, .hourly_table tr, .forecast_table tr {
+    border-color: #46637f; }
+  .actual_table th, .actual_table td, .hourly_table th, .hourly_table td, .forecast_table th, .forecast_table td {
+    margin: .5em 1em; }
+    @media (min-width: 480px) {
+      .actual_table th, .actual_table td, .hourly_table th, .hourly_table td, .forecast_table th, .forecast_table td {
+        padding: 0 1em !important;
+        width: 200px; } }
+  .actual_table th, .actual_table td:before, .hourly_table th, .hourly_table td:before, .forecast_table th, .forecast_table td:before {
+    color: #dd5; }
+  .actual_table .hourly_time_tr, .actual_table .forecast_time, .hourly_table .hourly_time_tr, .hourly_table .forecast_time, .forecast_table .hourly_time_tr, .forecast_table .forecast_time {
+    color: #dd5; }
 
-.hourlyGrid td>div{
-    text-align: center;
-}
+.actual_temp {
+  font-size: 2em;
+  text-align: center; }
 
-.actual_temp{
-    font-size: 2em;
-    font-weight: bold;
-}
+.actual_text {
+  font-style: italic; }
 
-.actual_text{
-    font-style: italic;
-    font-size: 1.5em;
-    font-weight: bold;
-}
+.hourly_temp, .forecast_temp {
+  font-size: 1.5em;
+  text-align: center; }
+
+.hourly_text, .forecast_text, .forecast_text_deviation {
+  font-size: 0.7em;
+  text-align: center;
+  font-style: italic; }
+
+/*# sourceMappingURL=styles.css.map */
