@@ -9,7 +9,7 @@ exports.getHourly = getHourly;
 
 
 /* Запрашивает почасовой прогноз и отправляет обратно */
-function getHourly(callback){
+function getHourly(callback, COLLECTION){
     if(!manifest || !manifest.list) return;
 
     var requestArray = [];
@@ -40,7 +40,7 @@ function getHourly(callback){
     };
 
     requestArray.forEach(function(val){
-        submitRequest(val, func);
+        submitRequest(val, func, COLLECTION);
     });
 }
 
@@ -72,7 +72,7 @@ function getEndResult(responseArray){
 
 
 /* Запрос данных с сайта */
-function submitRequest(values, callback){
+function submitRequest(values, callback, COLLECTION){
 
     request({
         uri: values.url
@@ -80,13 +80,13 @@ function submitRequest(values, callback){
         var $;
         if(body) $ = cheerio.load(body);
 
-        findParameter($, values, callback);
+        findParameter($, values, callback, COLLECTION);
     });
 }
 
 
 /* Ищет параметры для каждого случая */
-function findParameter($, values, callback){
+function findParameter($, values, callback, COLLECTION){
 
     var result = [],
         res = {};
@@ -107,7 +107,7 @@ function findParameter($, values, callback){
             var link = $(this);
             var text = link.text();
             if(!result[key]) result[key] = {};
-            result[key]['text'] = clearstr.translate(text);
+            result[key]['text'] = clearstr.translate(text, COLLECTION);
         });
     }
 

@@ -41,7 +41,7 @@
         </tr>
         <tr ng-repeat="val in forecast" class="forecast_tr">
             <th class="forecast_name">{{val.name}}</th>
-            <td ng-repeat="vall in val" class="forecast_td">
+            <td ng-repeat="vall in val" class="forecast_td {{vall.holyday}}">
                 <span class="forecast_temp">{{vall.temp}}</span>
                 <span class="forecast_temp_deviation">{{vall.temp_deviation}}</span>
                 <br>
@@ -57,6 +57,9 @@
     var myApp = angular.module('myApp', []);
 </script>
 <script src="js/controllers/RequestController.js"></script>
+<!--<link rel="stylesheet" type="text/css" href="ext/classic/theme-classic/resources/theme-classic-all-debug.css">-->
+<!--<script src="ext/ext-all-debug.js"></script>-->
+<!--<script src="app/app.js"></script>-->
 
 </body>
 </html>

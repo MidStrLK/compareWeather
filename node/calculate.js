@@ -115,7 +115,6 @@ function getAverageValueText(arr) {
 
 /* Посчитать среднее значение массива Температур */
 function getAverageValueTemp(arr){
-    console.info('arr - ',arr);
     var arrLen = arr.length,
         result = 0;
     for (var i = 0; i < arrLen; i++) {

@@ -26,6 +26,7 @@ function getAllWeather(callback, COLLECTION){
         length = 0,
         responseArrayLength = 0,
         func = function(data){
+
             responseArray = responseArray.concat(data);
             responseArrayLength++;
 
@@ -85,7 +86,7 @@ function submitRequest(values, callback){
         var $ = cheerio.load(body);
 
         for(var key in values.params){
-            findParameter($, values.params[key], key, values.name, values.inc, values.periodic, callback)
+            findParameter($, values.params[key], key, values.name, values.firstNumber, values.periodic, callback)
         }
     });
 }
@@ -105,7 +106,6 @@ function findParameter($, tag, key, name, firstNumber, periodic, callback){
         intArr.push(text);
 
     });
-
 
     intArr['forEach'](function (val, num) {
 

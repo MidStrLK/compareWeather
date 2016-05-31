@@ -46,7 +46,7 @@ function submitRequest(response, handle, pathname, postData, COLLECTION){
           console.info('postData - ',postData);
           mongodb.requestMDB(path, func, JSON.parse(postData), COLLECTION);
       }else if (pathname === '/gethourly') {
-          hourly.getHourly(func);
+          hourly.getHourly(func, COLLECTION);
       }else if (pathname === '/getactual') {
           actual.getActual(func);
       } else if (mongodb.requestMDB) {

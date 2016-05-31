@@ -68,6 +68,10 @@ h1 {
   .actual_table .hourly_time_tr, .actual_table .forecast_time, .hourly_table .hourly_time_tr, .hourly_table .forecast_time, .forecast_table .hourly_time_tr, .forecast_table .forecast_time {
     color: #dd5; }
 
+.class-holyday {
+  color: lightgreen;
+  font-style: italic; }
+
 .actual_temp {
   font-size: 2em;
   text-align: center; }
