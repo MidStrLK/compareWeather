@@ -45,7 +45,7 @@ exports.list = [
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/weather-forecast/294021',
 			params: {
 				 now_text: '#feed-tabs .current .cond'
-				,now_temp: '#feed-tabs .current .temp'
+				,now_temp: '#feed-tabs .current .large-temp'
 			}
 		},{
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021',
@@ -60,7 +60,7 @@ exports.list = [
 			firstNumber: 5,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '#feed-tabs .day .temp'
+				,day_temp: '.panel-body #feed-tabs .day .large-temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		},{
@@ -68,7 +68,7 @@ exports.list = [
 			firstNumber: 10,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '#feed-tabs .day .temp'
+				,day_temp: '.panel-body #feed-tabs .day .large-temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		}],
