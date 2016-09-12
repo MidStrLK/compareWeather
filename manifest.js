@@ -44,15 +44,15 @@ exports.list = [
 		params: [{
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/weather-forecast/294021',
 			params: {
-				 now_text: '#feed-main .cond'
-				,now_temp: '#feed-main .temp'
+				 now_text: '#feed-tabs .current .cond'
+				,now_temp: '#feed-tabs .current .temp'
 			}
 		},{
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021',
 			firstNumber: 0,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '#feed-tabs .day .temp'
+				,day_temp: '.panel-body #feed-tabs .day .large-temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		},{
