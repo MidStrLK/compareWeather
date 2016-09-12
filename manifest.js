@@ -45,14 +45,14 @@ exports.list = [
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/weather-forecast/294021',
 			params: {
 				 now_text: '#feed-tabs .current .cond'
-				,now_temp: '#feed-tabs .current .large-temp'
+				,now_temp: '#feed-tabs .current .temp'
 			}
 		},{
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021',
 			firstNumber: 0,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '.panel-body #feed-tabs .day .large-temp'
+				,day_temp: '#feed-tabs .current .temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		},{
@@ -60,7 +60,7 @@ exports.list = [
 			firstNumber: 5,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '.panel-body #feed-tabs .day .large-temp'
+				,day_temp: '#feed-tabs .day .temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		},{
@@ -68,24 +68,24 @@ exports.list = [
 			firstNumber: 10,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '.panel-body #feed-tabs .day .large-temp'
+				,day_temp: '#feed-tabs .day .temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		}],
         hourly:[{
             url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=0&lang=en-us',
-            text: '.forecast>td>div',
-            temp: '.temp>td',
+            text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
+            temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             firstNumber: 0
         },{
             url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=8',
-            text: '.forecast>td>div',
-            temp: '.temp>td',
+            text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
+            temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             firstNumber: 8
         },{
             url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=16',
-            text: '.forecast>td>div',
-            temp: '.temp>td',
+            text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
+            temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             firstNumber: 16
         }]
 	}

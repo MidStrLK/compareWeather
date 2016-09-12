@@ -28,7 +28,32 @@ function getHourly(callback, COLLECTION){
 
     var responseArray = [],
         index = 0,
+        getDataFromAccuweather = function(data){
+            var res = {},
+                zeroKey = parseInt(Object.keys(data)[0]),
+                hours = (new Date()).getHours();
+
+            for(var i=0; i<8; i++){
+                var num = String(zeroKey + i + hours);
+                if(num < 24){
+                    res[String(zeroKey + i + hours)] = {
+                        text: data[String(zeroKey + i)].text,
+                        temp: data[String(zeroKey + i + 8)].text
+                    }
+                }
+
+            }
+
+            res['name'] = 'accuweather';
+
+            return res;
+        },
         func = function(data){
+
+            if(data && data.name === 'accuweather'){
+                data = getDataFromAccuweather(data);
+            }
+
             index++;
             if(data) responseArray.push(data);
 
