@@ -45,7 +45,7 @@ exports.list = [
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/weather-forecast/294021',
 			params: {
 				 now_text: '#feed-tabs .current .cond'
-				,now_temp: '#feed-tabs .current .temp'
+				,now_temp: '#feed-tabs .current .large-temp'
 			}
 		},{
 			url: 'http://www.accuweather.com/ru/ru/moscow/294021/daily-weather-forecast/294021',
