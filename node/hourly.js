@@ -76,7 +76,8 @@ function calcAccuHourly(data){
 
     var res = [],
         i = 0,
-        nowTime = (new Date()).getHours() + 7;
+        date = new Date(),
+        nowTime = date.getHours() + date.getTimezoneOffset()/60 + 3;
 
     while(nowTime < 24){
 
@@ -85,7 +86,7 @@ function calcAccuHourly(data){
             text: data[0].text,
             temp: data[0].temp,
             firstNumber: i,
-            name: 'accuweather' + '_' + i + '_' + nowTime
+            name: 'accuweather'
         });
 
         i += 8;
