@@ -17,10 +17,12 @@ function getHourly(callback, COLLECTION){
     for(var key in manifest.list) {
         if(manifest.list[key].hourly && manifest.list[key].hourly instanceof Array) {
             var valHourly = manifest.list[key].hourly;
-
+console.info('key - ',manifest.list[key].name);
             valHourly.forEach(function(valH, keyH){
                 valHourly[keyH].name = manifest.list[key].name;
             });
+
+            if(manifest.list[key].name === 'accuweather') valHourly = calcAccuHourly(valHourly);
 
             requestArray = requestArray.concat(valHourly)
         }
@@ -29,6 +31,7 @@ function getHourly(callback, COLLECTION){
     var responseArray = [],
         index = 0,
         getDataFromAccuweather = function(data){
+            console.info('data - ',data);
             var res = {},
                 zeroKey = parseInt(Object.keys(data)[0]),
                 hours = (new Date()).getHours();
@@ -67,6 +70,31 @@ function getHourly(callback, COLLECTION){
     requestArray.forEach(function(val){
         submitRequest(val, func, COLLECTION);
     });
+}
+
+function calcAccuHourly(data){
+
+    var res = [],
+        i = 0,
+        nowTime = (new Date()).getHours();
+
+    while(nowTime < 24){
+
+        res.push({
+            url: data[0].url + nowTime,
+            text: data[0].text,
+            temp: data[0].temp,
+            firstNumber: i,
+            name: 'accuweather' + nowTime
+        });
+
+        i += 8;
+        nowTime += 8;
+    }
+
+    console.info('res - ',res);
+
+    return res;
 }
 
 /* Собирает результат ил нескольких массивов/объектов */

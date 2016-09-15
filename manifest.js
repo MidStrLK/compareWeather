@@ -52,7 +52,7 @@ exports.list = [
 			firstNumber: 0,
 			params: {
 				 day_text: '#feed-tabs .day .cond'
-				,day_temp: '#feed-tabs .current .temp'
+				,day_temp: '#feed-tabs .day .temp'
 				//,day_temp_night: '#feed-tabs .day .low'
 			}
 		},{
@@ -73,11 +73,11 @@ exports.list = [
 			}
 		}],
         hourly:[{
-            url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=0&lang=en-us',
+            url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=',
             text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             firstNumber: 0
-        },{
+        }/*,{
             url: 'http://www.accuweather.com/en/ru/moscow/294021/hourly-weather-forecast/294021?hour=8',
             text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
@@ -87,6 +87,6 @@ exports.list = [
             text: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             temp: '#detail-hourly > div > div.hourly-table.overview-hourly > table > tbody > tr > td > span',
             firstNumber: 16
-        }]
+        }*/]
 	}
 ];
