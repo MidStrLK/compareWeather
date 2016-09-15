@@ -85,7 +85,7 @@ function calcAccuHourly(data){
             text: data[0].text,
             temp: data[0].temp,
             firstNumber: i,
-            name: 'accuweather'
+            name: 'accuweather' + '_' + i + '_' + nowTime
         });
 
         i += 8;
