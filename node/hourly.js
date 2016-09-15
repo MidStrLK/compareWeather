@@ -17,7 +17,7 @@ function getHourly(callback, COLLECTION){
     for(var key in manifest.list) {
         if(manifest.list[key].hourly && manifest.list[key].hourly instanceof Array) {
             var valHourly = manifest.list[key].hourly;
-console.info('key - ',manifest.list[key].name);
+
             valHourly.forEach(function(valH, keyH){
                 valHourly[keyH].name = manifest.list[key].name;
             });
@@ -31,10 +31,9 @@ console.info('key - ',manifest.list[key].name);
     var responseArray = [],
         index = 0,
         getDataFromAccuweather = function(data){
-            console.info('data - ',data);
             var res = {},
                 zeroKey = parseInt(Object.keys(data)[0]),
-                hours = (new Date()).getHours();
+                hours = 0;//(new Date()).getHours();
 
             for(var i=0; i<8; i++){
                 var num = String(zeroKey + i + hours);
@@ -48,7 +47,7 @@ console.info('key - ',manifest.list[key].name);
             }
 
             res['name'] = 'accuweather';
-
+console.info('res - ',res);
             return res;
         },
         func = function(data){
@@ -85,8 +84,8 @@ function calcAccuHourly(data){
             url: data[0].url + nowTime,
             text: data[0].text,
             temp: data[0].temp,
-            firstNumber: i,
-            name: 'accuweather' + '_' + i + '_' + nowTime
+            firstNumber: nowTime,
+            name: 'accuweather'
         });
 
         i += 8;
