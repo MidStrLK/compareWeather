@@ -76,7 +76,7 @@ function calcAccuHourly(data){
 
     var res = [],
         i = 0,
-        nowTime = (new Date()).getHours();
+        nowTime = (new Date()).getHours() + 7;
 
     while(nowTime < 24){
 
